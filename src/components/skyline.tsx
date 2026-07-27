@@ -603,8 +603,7 @@ function SkylineCaption({
             transition={{ duration: 0.25 }}
             className="text-sm text-ink-faint"
           >
-            Nothing on the skyline matches{" "}
-            <span className="text-ink">“{query}”</span>.
+            No monument matches <span className="text-ink">“{query}”</span>.
           </motion.p>
         ) : active ? (
           <motion.div

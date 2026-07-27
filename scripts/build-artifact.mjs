@@ -490,8 +490,19 @@ const html = String.raw`<title>Monuments of Ghana</title>
   .where .outline { fill: color-mix(in oklab, var(--ink) 4%, transparent); stroke: color-mix(in oklab, var(--ink) 25%, transparent); stroke-width: 3; stroke-linejoin: round; }
   .where .other { fill: color-mix(in oklab, var(--ink) 30%, transparent); }
   .where .halo { fill: none; stroke: color-mix(in oklab, var(--ink) 50%, transparent); stroke-width: 2; opacity: 0; transition: opacity 200ms var(--ease); }
-  .where .pin-target:hover .halo, .where .hit:focus-visible + .halo { opacity: 1; }
+  .where .halo.gold { stroke: var(--gold); }
+  /* :focus as well as :focus-visible — the target is invisible, so a ring is
+     never noise, and :focus-visible alone can leave keyboard users with none. */
+  .where .pin-target:hover .halo,
+  .where .hit:focus + .halo,
+  .where .hit:focus-visible + .halo { opacity: 1; }
+  /*
+    Map targets are invisible circles sized for the finger, not the eye. The
+    default focus ring boxes their bounding rect, drawing a large rectangle
+    around a small pin — so it is suppressed in favour of the ring above.
+  */
   .where .hit { fill: transparent; cursor: pointer; }
+  .where .hit:focus, .where .hit:focus-visible { outline: none; }
   .where .shadow { fill: color-mix(in oklab, var(--ink) 20%, transparent); }
   .where .pin { fill: var(--gold); stroke: color-mix(in oklab, var(--ink) 70%, transparent); stroke-width: 3; stroke-linejoin: round; }
   .where .pin-hole { fill: var(--paper); }
@@ -543,7 +554,7 @@ const html = String.raw`<title>Monuments of Ghana</title>
     <h1 class="serif">Six centuries of Ghana, standing in a row.</h1>
     <p id="hint">Scroll sideways along the horizon — everything is in the order it was built.</p>
     <div class="search">
-      <input id="q" type="search" placeholder="Accra, Kumasi, castle, 1957…" aria-label="Narrow the skyline" autocomplete="off" />
+      <input id="q" type="search" placeholder="Accra, Kumasi, castle, 1957…" aria-label="Search monuments" autocomplete="off" />
       <button id="clear" type="button" aria-label="Clear search" hidden>✕</button>
     </div>
   </div>
@@ -561,7 +572,7 @@ const html = String.raw`<title>Monuments of Ghana</title>
   <div class="backdrop"></div>
   <div class="record-hero" id="recordHero" aria-hidden="true"><div></div></div>
   <div class="record-scroll" id="recordScroll">
-    <button class="back eyebrow" id="back" type="button">← Skyline</button>
+    <button class="back eyebrow" id="back" type="button">← All monuments</button>
     <article id="recordBody"></article>
   </div>
 </div>
@@ -783,7 +794,7 @@ const html = String.raw`<title>Monuments of Ghana</title>
 
   function renderCaption() {
     if (!matched.size) {
-      caption.innerHTML = '<p style="color:var(--ink-faint)">Nothing on the skyline matches “' +
+      caption.innerHTML = '<p style="color:var(--ink-faint)">No monument matches “' +
         esc(search.value.trim()) + "”.</p>";
       return;
     }
@@ -859,13 +870,14 @@ const html = String.raw`<title>Monuments of Ghana</title>
                   '<circle class="hit" r="34" role="button" tabindex="0" data-open="' + o.slug + '" aria-label="Open ' + esc(o.name) + '" />' +
                   '<circle class="halo" r="16" vector-effect="non-scaling-stroke" />' +
                 "</g></g>").join("") +
-            '<g transform="translate(' + m.mapPoint.x + " " + m.mapPoint.y + ')">' +
+            '<g class="pin-target" transform="translate(' + m.mapPoint.x + " " + m.mapPoint.y + ')">' +
               "<title>Zoom to the exact position</title>" +
               '<g data-mark transform="scale(1)">' +
                 '<ellipse class="shadow" cy="2" rx="13" ry="4" />' +
                 '<path class="pin" d="' + PIN + '" vector-effect="non-scaling-stroke" />' +
                 '<circle class="pin-hole" cy="-40" r="8" />' +
                 '<circle class="hit" r="40" role="button" tabindex="0" data-zoom aria-pressed="false" aria-label="Zoom to the exact position" />' +
+                '<circle class="halo gold" cy="-26" r="34" vector-effect="non-scaling-stroke" />' +
               "</g></g>" +
           "</svg>" +
           '<figcaption class="eyebrow"><button type="button" data-zoom>Zoom to pin</button></figcaption>' +

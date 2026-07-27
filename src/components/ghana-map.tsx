@@ -145,18 +145,11 @@ export function GhanaMap({
           >
             <title>{`${point.monument.name} — ${point.monument.place}`}</title>
             <g data-mark>
-              <circle
-                r={16}
-                className="fill-none stroke-ink/50 opacity-0 transition-opacity group-hover/pin:opacity-100"
-                strokeWidth={2}
-                vectorEffect="non-scaling-stroke"
-              />
               <circle r={9} className="fill-ink/30" />
               {/* A generous, invisible hit area — the dot itself is tiny. */}
               <circle
                 r={34}
-                fill="transparent"
-                className={onSelect ? "cursor-pointer" : undefined}
+                className="map-hit"
                 role={onSelect ? "button" : undefined}
                 tabIndex={onSelect ? 0 : undefined}
                 aria-label={onSelect ? `Open ${point.monument.name}` : undefined}
@@ -167,12 +160,22 @@ export function GhanaMap({
                   onSelect?.(point.monument);
                 }}
               />
+              {/* Follows the hit target, so focus and hover read as one ring. */}
+              <circle
+                r={16}
+                className="map-ring fill-none stroke-ink/50 group-hover/pin:opacity-100"
+                strokeWidth={2}
+                vectorEffect="non-scaling-stroke"
+              />
             </g>
           </g>
         ))}
 
         {/* This record's monument: a dropped pin, tip on the coordinate. */}
-        <g transform={`translate(${active.x} ${active.y})`}>
+        <g
+          transform={`translate(${active.x} ${active.y})`}
+          className="group/pin"
+        >
           <title>
             {zoomed ? "Zoom back out to Ghana" : "Zoom to the exact position"}
           </title>
@@ -189,8 +192,7 @@ export function GhanaMap({
             <circle cy={-40} r={8} className="fill-paper" />
             <circle
               r={40}
-              fill="transparent"
-              className="cursor-pointer"
+              className="map-hit"
               role="button"
               tabIndex={0}
               aria-pressed={zoomed}
@@ -205,6 +207,14 @@ export function GhanaMap({
                 event.preventDefault();
                 toggle();
               }}
+            />
+            {/* Hugs the pin rather than boxing its bounding rect. */}
+            <circle
+              cy={-26}
+              r={34}
+              className="map-ring fill-none stroke-gold group-hover/pin:opacity-100"
+              strokeWidth={2}
+              vectorEffect="non-scaling-stroke"
             />
           </g>
         </g>

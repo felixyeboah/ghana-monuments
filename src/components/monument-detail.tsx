@@ -170,7 +170,7 @@ export function MonumentRecord({
         transition={{ delay: 0.28, duration: 0.4 }}
         className="u-eyebrow fixed left-5 top-5 z-50 cursor-pointer rounded-full border border-ink/15 bg-paper/80 px-4 py-2 text-ink backdrop-blur-md transition-colors hover:border-ink/40 hover:bg-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold sm:left-8 sm:top-8"
       >
-        ← Skyline
+        ← All monuments
       </motion.button>
 
       <motion.article

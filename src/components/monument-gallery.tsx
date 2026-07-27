@@ -101,7 +101,13 @@ export function MonumentGallery({
         </button>
       </div>
 
-      <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/*
+        Padded on every side because the selected thumbnail's ring sits 4px
+        outside its box (2px offset + 2px width). A scroll container clips both
+        axes once either one is not `visible`, so without this the ring is cut
+        off top and bottom.
+      */}
+      <div className="mt-2 flex gap-2 overflow-x-auto px-1 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {photos.map((thumb, i) => (
           <button
             key={thumb.src}

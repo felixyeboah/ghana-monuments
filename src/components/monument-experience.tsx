@@ -90,7 +90,7 @@ export function MonumentExperience({ monuments }: { monuments: Monument[] }) {
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Accra, Kumasi, castle, 1957…"
-                    aria-label="Narrow the skyline"
+                    aria-label="Search monuments"
                     className="h-11 rounded-full border-ink/15 bg-card/70 px-5 text-center text-sm placeholder:text-ink-faint/70 focus-visible:border-gold focus-visible:ring-gold/25"
                   />
                   {query && (

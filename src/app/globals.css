@@ -160,6 +160,37 @@
   }
 
   /*
+    Map targets are invisible circles sized for the finger, not the eye. A
+    default focus ring boxes their bounding rect, which draws a large rectangle
+    around a small pin — so the outline is suppressed and a ring that follows
+    the marker's shape is shown instead.
+  */
+  .map-hit {
+    fill: transparent;
+    cursor: pointer;
+  }
+
+  .map-hit:focus,
+  .map-hit:focus-visible {
+    outline: none;
+  }
+
+  .map-ring {
+    opacity: 0;
+    transition: opacity 200ms var(--ease-editorial);
+  }
+
+  /*
+    Matched on :focus as well as :focus-visible. The target is invisible, so a
+    ring is never noise — and relying on :focus-visible alone leaves keyboard
+    users with no indicator at all in the cases where it does not match.
+  */
+  .map-hit:focus + .map-ring,
+  .map-hit:focus-visible + .map-ring {
+    opacity: 1;
+  }
+
+  /*
     Dissolves the pinned record hero into the page, so the record card meets a
     fade rather than slicing the monument off mid-wall.
   */
