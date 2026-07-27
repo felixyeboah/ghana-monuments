@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Monuments of Ghana
 
-## Getting Started
+Eleven monuments, drawn as silhouettes and laid out along a horizon in the order
+they were built — from the mud mosque at Larabanga (c. 1421) to the minarets over
+Accra (2021). Scrolling the skyline walks forward through six centuries.
 
-First, run the development server:
+Picking a monument flies it up into a record: an essay, contributor photography,
+the Wikipedia entry, and a drawn map of Ghana showing where it stands among the
+other ten.
+
+## Running it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How it is put together
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Next.js 16 · Tailwind 4 · shadcn/ui · Motion**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The skyline does not use native scrolling. Wheel, drag, keyboard and search all
+write to a single target offset; a spring follows it and the track moves by
+transform. Keeping the glide, the settle onto a monument and the focus falloff on
+one clock avoids CSS scroll-snap fighting the wheel.
 
-## Learn More
+Each monument's state comes from two custom properties — `--focus` (distance from
+the centre of the viewport, written every frame) and `--dim` (whether it survived
+the current search). Everything visual follows from those two numbers, which is
+only possible because the silhouettes are single-colour.
 
-To learn more about Next.js, take a look at the following resources:
+The flight between the skyline and a record is an explicit FLIP, not a shared
+`layoutId`. Motion's layout projection walks the ancestor tree, and the skyline
+slot lives inside the transform-driven track — projection kept resolving the
+record hero into the track's coordinate space. Measuring both boxes and animating
+between them needs no projection tree at all.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Generated data
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Four build steps produce everything under `src/data` and `src/lib`. Each is
+committed, so a clean checkout runs without network access.
 
-## Deploy on Vercel
+| Command | Output | Source |
+| --- | --- | --- |
+| `pnpm gen:art` | `src/lib/monument-art.ts` | the traced SVGs in `assets/monuments` |
+| `pnpm gen:media` | `src/data/monument-media.json` | Wikipedia + Wikimedia Commons |
+| `node scripts/build-ghana-map.mjs` | `src/data/ghana-map.json` | geoBoundaries ADM0 |
+| `node scripts/build-artifact.mjs` | `artifact/monuments-of-ghana.html` | all of the above |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The monument silhouettes are potrace traces: one path, `fill="currentColor"`,
+which is what lets focus and ghost states be pure CSS.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## The Artifact build
+
+`artifact/monuments-of-ghana.html` is a standalone single-file version — no
+build step, no network, roughly 740 KB. It reads the same sources as the app
+(Node imports the `.ts` data modules directly), so the two cannot drift.
+
+It runs under a CSP that blocks every external host, which shapes three things:
+the display face is inlined as a data URI rather than linked; photography is
+embedded as WebP data URIs, one per monument instead of the app's six; and the
+map is a drawn outline rather than tiles, since no tile server is reachable.
+
+## Credits
+
+Photography by Wikimedia Commons contributors, credited and licence-linked on
+every record. Encyclopaedia text from Wikipedia (CC BY-SA 4.0). National boundary
+from [geoBoundaries](https://www.geoboundaries.org) (CC BY 4.0). Display face is
+Instrument Serif (SIL Open Font License).
