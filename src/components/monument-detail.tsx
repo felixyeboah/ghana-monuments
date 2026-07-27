@@ -243,8 +243,8 @@ export function MonumentRecord({
               <h2 className="u-eyebrow text-ink-faint">Where it stands</h2>
 
               <div className="mt-4 flex items-center gap-6 sm:gap-9">
-                <div className="h-[16rem] shrink-0 sm:h-[19rem]">
-                  <GhanaMap slug={monument.slug} />
+                <div className="h-[17rem] w-[10rem] shrink-0 sm:h-[20rem] sm:w-[13rem]">
+                  <GhanaMap slug={monument.slug} onSelect={onNavigate} />
                 </div>
 
                 <dl className="min-w-0">
@@ -268,7 +268,7 @@ export function MonumentRecord({
                   </dd>
 
                   <dd className="mt-5 text-xs leading-relaxed text-ink-faint">
-                    The faint marks are the other ten.
+                    The faint marks are the other ten — select one to open it.
                   </dd>
                 </dl>
               </div>

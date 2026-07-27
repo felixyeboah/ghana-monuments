@@ -29,6 +29,10 @@ function projectPoint(lat, lon) {
   };
 }
 
+/** Teardrop with its tip at the origin, so the point sits on the coordinate. */
+const PIN =
+  "M0 0 C-7 -16 -22 -26 -22 -40 A22 22 0 1 1 22 -40 C22 -26 7 -16 0 0 Z";
+
 const OUT_DIR = "artifact";
 const OUT = `${OUT_DIR}/monuments-of-ghana.html`;
 
@@ -484,10 +488,17 @@ const html = String.raw`<title>Monuments of Ghana</title>
   .where svg { display: block; height: 16rem; width: auto; flex-shrink: 0; }
   @media (min-width: 640px) { .where svg { height: 19rem; } }
   .where .outline { fill: color-mix(in oklab, var(--ink) 4%, transparent); stroke: color-mix(in oklab, var(--ink) 25%, transparent); stroke-width: 3; stroke-linejoin: round; }
-  .where .other { fill: color-mix(in oklab, var(--ink) 20%, transparent); }
-  .where .halo { fill: color-mix(in oklab, var(--gold) 15%, transparent); }
-  .where .ring { fill: none; stroke: var(--gold); stroke-width: 4; }
-  .where .here { fill: var(--gold); }
+  .where .other { fill: color-mix(in oklab, var(--ink) 30%, transparent); }
+  .where .halo { fill: none; stroke: color-mix(in oklab, var(--ink) 50%, transparent); stroke-width: 2; opacity: 0; transition: opacity 200ms var(--ease); }
+  .where .pin-target:hover .halo, .where .hit:focus-visible + .halo { opacity: 1; }
+  .where .hit { fill: transparent; cursor: pointer; }
+  .where .shadow { fill: color-mix(in oklab, var(--ink) 20%, transparent); }
+  .where .pin { fill: var(--gold); stroke: color-mix(in oklab, var(--ink) 70%, transparent); stroke-width: 3; stroke-linejoin: round; }
+  .where .pin-hole { fill: var(--paper); }
+  .where figure { margin: 0; display: flex; flex-direction: column; gap: 0.5rem; flex-shrink: 0; }
+  .where figcaption { margin: 0; text-align: center; color: var(--ink-faint); }
+  .where figcaption button { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+  .where figcaption button:hover { color: var(--ink); }
   .where dl { margin: 0; min-width: 0; }
   .where dt { color: var(--ink-faint); }
   .where dt + dd { margin: 0.25rem 0 0; }
@@ -561,6 +572,10 @@ const html = String.raw`<title>Monuments of Ghana</title>
 
   const MONUMENTS = ${JSON.stringify(payload)};
   const GHANA = ${JSON.stringify({ viewBox: ghana.viewBox, path: ghana.path })};
+  const PIN = ${JSON.stringify(PIN)};
+  const MAP_FULL = GHANA.viewBox.split(" ").map(Number);
+  /** Enough to separate the six Accra monuments; more just magnifies empty fill. */
+  const MAP_ZOOM = 3.5;
   const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
   const FLIGHT = 580;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -833,14 +848,28 @@ const html = String.raw`<title>Monuments of Ghana</title>
 
     const where = m.mapPoint
       ? '<section class="where"><h2 class="eyebrow">Where it stands</h2><div class="layout">' +
-          '<svg viewBox="' + GHANA.viewBox + '" role="img" aria-label="Map of Ghana marking ' + esc(m.place) + '">' +
-            '<path class="outline" d="' + GHANA.path + '" />' +
-            MONUMENTS.filter((o) => o.slug !== m.slug && o.mapPoint)
-              .map((o) => '<circle class="other" cx="' + o.mapPoint.x + '" cy="' + o.mapPoint.y + '" r="9" />').join("") +
-            '<circle class="halo" cx="' + m.mapPoint.x + '" cy="' + m.mapPoint.y + '" r="34" />' +
-            '<circle class="ring" cx="' + m.mapPoint.x + '" cy="' + m.mapPoint.y + '" r="18" />' +
-            '<circle class="here" cx="' + m.mapPoint.x + '" cy="' + m.mapPoint.y + '" r="8" />' +
+          '<figure><svg id="ghanaMap" viewBox="' + GHANA.viewBox + '" role="group"' +
+            ' aria-label="Map of Ghana. Every monument is marked; select one to open it.">' +
+            '<path class="outline" d="' + GHANA.path + '" vector-effect="non-scaling-stroke" />' +
+            MONUMENTS.filter((o) => o.slug !== m.slug && o.mapPoint).map((o) =>
+              '<g class="pin-target" transform="translate(' + o.mapPoint.x + " " + o.mapPoint.y + ')">' +
+                "<title>" + esc(o.name + " — " + o.place) + "</title>" +
+                '<g data-mark transform="scale(1)">' +
+                  '<circle class="other" r="9" />' +
+                  '<circle class="hit" r="34" role="button" tabindex="0" data-open="' + o.slug + '" aria-label="Open ' + esc(o.name) + '" />' +
+                  '<circle class="halo" r="16" vector-effect="non-scaling-stroke" />' +
+                "</g></g>").join("") +
+            '<g transform="translate(' + m.mapPoint.x + " " + m.mapPoint.y + ')">' +
+              "<title>Zoom to the exact position</title>" +
+              '<g data-mark transform="scale(1)">' +
+                '<ellipse class="shadow" cy="2" rx="13" ry="4" />' +
+                '<path class="pin" d="' + PIN + '" vector-effect="non-scaling-stroke" />' +
+                '<circle class="pin-hole" cy="-40" r="8" />' +
+                '<circle class="hit" r="40" role="button" tabindex="0" data-zoom aria-pressed="false" aria-label="Zoom to the exact position" />' +
+              "</g></g>" +
           "</svg>" +
+          '<figcaption class="eyebrow"><button type="button" data-zoom>Zoom to pin</button></figcaption>' +
+          "</figure>" +
           "<dl>" +
             '<dt class="eyebrow">Place</dt><dd class="place serif">' + esc(m.place) + "</dd>" +
             '<dt class="eyebrow">Region</dt><dd class="region">' + esc(m.region) + "</dd>" +
@@ -848,7 +877,7 @@ const html = String.raw`<title>Monuments of Ghana</title>
               Math.abs(m.coordinates.lat).toFixed(4) + "°" + (m.coordinates.lat >= 0 ? "N" : "S") + "<br />" +
               Math.abs(m.coordinates.lon).toFixed(4) + "°" + (m.coordinates.lon >= 0 ? "E" : "W") +
             "</dd>" +
-            '<dd class="note">The faint marks are the other ten.</dd>' +
+            '<dd class="note">The faint marks are the other ten — select one to open it.</dd>' +
           "</dl>" +
         "</div></section>"
       : "";
@@ -881,6 +910,91 @@ const html = String.raw`<title>Monuments of Ghana</title>
 
     for (const button of recordBody.querySelectorAll("[data-goto]")) {
       button.addEventListener("click", () => openRecord(button.dataset.goto));
+    }
+    wireMap(m);
+  }
+
+  /**
+   * The map's zoom moves the viewBox rather than transforming a group: CSS
+   * transforms on an SVG <g> are unreliable across engines, and the SVG
+   * transform attribute cannot be transitioned. Frames are written straight to
+   * the DOM so the outline and eleven marks are not rebuilt sixty times a second.
+   */
+  function wireMap(m) {
+    const svg = recordBody.querySelector("#ghanaMap");
+    if (!svg || !m.mapPoint) return;
+
+    let box = MAP_FULL.slice();
+    let zoomed = false;
+    let frame = 0;
+
+    const paint = (next) => {
+      box = next;
+      svg.setAttribute("viewBox", next.join(" "));
+      // Counter-scale the marks so zooming reveals position, not bigger blobs.
+      const inverse = next[2] / MAP_FULL[2];
+      for (const mark of svg.querySelectorAll("[data-mark]")) {
+        mark.setAttribute("transform", "scale(" + inverse + ")");
+      }
+    };
+
+    const setZoom = (next) => {
+      zoomed = next;
+      const target = zoomed
+        ? [
+            m.mapPoint.x - MAP_FULL[2] / (2 * MAP_ZOOM),
+            m.mapPoint.y - MAP_FULL[3] / (2 * MAP_ZOOM),
+            MAP_FULL[2] / MAP_ZOOM,
+            MAP_FULL[3] / MAP_ZOOM,
+          ]
+        : MAP_FULL.slice();
+
+      for (const control of recordBody.querySelectorAll("[data-zoom]")) {
+        if (control.tagName === "BUTTON") {
+          control.textContent = zoomed ? "Whole country" : "Zoom to pin";
+        } else {
+          control.setAttribute("aria-pressed", String(zoomed));
+          control.setAttribute(
+            "aria-label",
+            zoomed ? "Zoom back out to the whole country" : "Zoom to the exact position"
+          );
+        }
+      }
+
+      // A hidden tab gets no animation frames, so a tween there would never
+      // arrive and would strand the map between states. Same for reduced motion.
+      if (reduced || document.hidden) { paint(target); return; }
+
+      const from = box.slice();
+      const start = performance.now();
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / 650);
+        const eased = 1 - Math.pow(1 - t, 4);
+        paint(from.map((value, i) => value + (target[i] - value) * eased));
+        if (t < 1) frame = requestAnimationFrame(tick);
+      };
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(tick);
+    };
+
+    paint(MAP_FULL.slice());
+
+    for (const control of recordBody.querySelectorAll("[data-zoom]")) {
+      control.addEventListener("click", () => setZoom(!zoomed));
+      control.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        setZoom(!zoomed);
+      });
+    }
+
+    for (const hit of svg.querySelectorAll("[data-open]")) {
+      hit.addEventListener("click", () => openRecord(hit.dataset.open));
+      hit.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        openRecord(hit.dataset.open);
+      });
     }
   }
 
