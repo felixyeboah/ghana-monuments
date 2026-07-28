@@ -112,6 +112,43 @@ for slug, entry in media.items():
     }
     print(f"{slug:26} {len(uri) / 1024:6.0f} KB  {width}x{height}")
 
+# Immersive textures for the artifact's 3D room, re-encoded from the local
+# files the app already uses. 4096 wide keeps the pair under a megabyte of
+# base64 — the artifact pays for every byte at open. Spheres flow through the
+# same way, so a dropped-in photosphere reaches the artifact on rebuild.
+IMMERSIVE_WIDTH = 4096
+IMMERSIVE_QUALITY = 68
+
+immersive = json.load(open("src/data/immersive-manifest.json"))
+assets["panos"] = {}
+assets["spheres"] = {}
+
+for slug, entry in immersive.items():
+    for kind, plural in (("pano", "panos"), ("sphere", "spheres")):
+        meta = entry.get(kind)
+        if not meta:
+            continue
+        path = "public" + meta["file"]
+        with Image.open(path) as im:
+            if im.width > IMMERSIVE_WIDTH:
+                im = im.resize(
+                    (IMMERSIVE_WIDTH, round(im.height * IMMERSIVE_WIDTH / im.width)),
+                    Image.LANCZOS,
+                )
+            buffer = io.BytesIO()
+            im.save(buffer, format="WEBP", quality=IMMERSIVE_QUALITY, method=6)
+            width, height = im.size
+        encoded = base64.b64encode(buffer.getvalue()).decode("ascii")
+        assets[plural][slug] = {
+            "src": f"data:image/webp;base64,{encoded}",
+            "width": width,
+            "height": height,
+            "title": meta["title"],
+            "credit": meta["credit"],
+            "licence": meta["licence"],
+        }
+        print(f"{slug:26} artifact {kind} {width}x{height} {len(encoded)//1024} KB (base64)")
+
 json.dump(assets, open(OUT, "w"))
 
 total = len(json.dumps(assets)) / 1024
