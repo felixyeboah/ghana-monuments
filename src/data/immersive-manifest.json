@@ -1,0 +1,667 @@
+{
+ "larabanga-mosque": {
+  "pano": null,
+  "photos": [
+   {
+    "file": "/immersive/larabanga-mosque/photo-0.webp",
+    "width": 1024,
+    "height": 420,
+    "title": "Ghana Larabanga mosque01",
+    "credit": "Stig Nygaard",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ghana_Larabanga_mosque01.jpg"
+   },
+   {
+    "file": "/immersive/larabanga-mosque/photo-1.webp",
+    "width": 1024,
+    "height": 724,
+    "title": "Ghana Larabanga mosque02",
+    "credit": "Stig Nygaard",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ghana_Larabanga_mosque02.jpg"
+   },
+   {
+    "file": "/immersive/larabanga-mosque/photo-2.webp",
+    "width": 1024,
+    "height": 1365,
+    "title": "Ghana Larabanga mosque03",
+    "credit": "Erik Kristensen",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ghana_Larabanga_mosque03.jpg"
+   },
+   {
+    "file": "/immersive/larabanga-mosque/photo-3.webp",
+    "width": 1024,
+    "height": 1365,
+    "title": "Ghana Larabanga mosque04",
+    "credit": "Stig Nygaard",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ghana_Larabanga_mosque04.jpg"
+   },
+   {
+    "file": "/immersive/larabanga-mosque/photo-4.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Larabanga Mosque, 001",
+    "credit": "Monocletophat123",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Larabanga_Mosque,_001.jpg"
+   },
+   {
+    "file": "/immersive/larabanga-mosque/photo-5.webp",
+    "width": 1024,
+    "height": 680,
+    "title": "Larabanga Mosque Ghana",
+    "credit": "Sathyan Velumani",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Larabanga_Mosque_Ghana.jpg"
+   }
+  ]
+ },
+ "elmina-castle": {
+  "pano": {
+   "file": "/immersive/elmina-castle/pano.webp",
+   "width": 8192,
+   "height": 1678,
+   "title": "Elmina Castle, panoramic sweep",
+   "credit": "Matti Blume \u2014 Wikimedia Commons",
+   "licence": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Castle,_Elmina_(P1100203-Pano).jpg"
+  },
+  "photos": [
+   {
+    "file": "/immersive/elmina-castle/photo-0.webp",
+    "width": 1024,
+    "height": 680,
+    "title": "Castle of St. George\u2019s 01",
+    "credit": "Bolance",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Castle_of_St._George%E2%80%99s_01.JPG"
+   },
+   {
+    "file": "/immersive/elmina-castle/photo-1.webp",
+    "width": 1024,
+    "height": 680,
+    "title": "Castle of St. George\u2019s 02",
+    "credit": "Bolance",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Castle_of_St._George%E2%80%99s_02.JPG"
+   },
+   {
+    "file": "/immersive/elmina-castle/photo-2.webp",
+    "width": 1024,
+    "height": 680,
+    "title": "Castle of St. George\u2019s 03",
+    "credit": "Bolance",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Castle_of_St._George%E2%80%99s_03.JPG"
+   },
+   {
+    "file": "/immersive/elmina-castle/photo-3.webp",
+    "width": 1024,
+    "height": 669,
+    "title": "Detail gevel met gevelsteen - Elmina - 20374835 - RCE",
+    "credit": "Loek Tangel",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Detail_gevel_met_gevelsteen_-_Elmina_-_20374835_-_RCE.jpg"
+   },
+   {
+    "file": "/immersive/elmina-castle/photo-4.webp",
+    "width": 1024,
+    "height": 683,
+    "title": "Cannons from Elmina Castle",
+    "credit": "Benggriff",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cannons_from_Elmina_Castle.JPG"
+   },
+   {
+    "file": "/immersive/elmina-castle/photo-5.webp",
+    "width": 1024,
+    "height": 683,
+    "title": "Condemn Cell Elmina Castle",
+    "credit": "Flixtey",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Condemn_Cell_Elmina_Castle.JPG"
+   }
+  ]
+ },
+ "cape-coast-castle": {
+  "pano": {
+   "file": "/immersive/cape-coast-castle/pano.webp",
+   "width": 5758,
+   "height": 1080,
+   "title": "Cape Coast from Fort Victoria",
+   "credit": "Adam Jones \u2014 Wikimedia Commons",
+   "licence": "CC BY-SA 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama_over_Town_from_Fort_Victoria_%E2%88%92_Cape_Coast_%E2%88%92_Central_region.jpg"
+  },
+  "photos": [
+   {
+    "file": "/immersive/cape-coast-castle/photo-0.webp",
+    "width": 1024,
+    "height": 584,
+    "title": "Cape Coast British Slave trade HQ atamari",
+    "credit": "Wikimedia Commons contributor",
+    "licence": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cape_Coast_British_Slave_trade_HQ_atamari.jpg"
+   },
+   {
+    "file": "/immersive/cape-coast-castle/photo-1.webp",
+    "width": 1024,
+    "height": 680,
+    "title": "Cape Coast Castle 03",
+    "credit": "Bolance",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cape_Coast_Castle_03.JPG"
+   },
+   {
+    "file": "/immersive/cape-coast-castle/photo-2.webp",
+    "width": 1024,
+    "height": 680,
+    "title": "Cape Coast Castle 02",
+    "credit": "Bolance",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cape_Coast_Castle_02.JPG"
+   },
+   {
+    "file": "/immersive/cape-coast-castle/photo-3.webp",
+    "width": 1024,
+    "height": 678,
+    "title": "Cape Coast Castle 02 Sept 2012",
+    "credit": "sixthofdecember",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cape_Coast_Castle_02_Sept_2012.jpg"
+   },
+   {
+    "file": "/immersive/cape-coast-castle/photo-4.webp",
+    "width": 1024,
+    "height": 669,
+    "title": "Bedrijvigheid op het strand met fort op de achtergrond - Cape Coast - 20373081 - RCE",
+    "credit": "Loek Tangel",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bedrijvigheid_op_het_strand_met_fort_op_de_achtergrond_-_Cape_Coast_-_20373081_-_RCE.jpg"
+   },
+   {
+    "file": "/immersive/cape-coast-castle/photo-5.webp",
+    "width": 1024,
+    "height": 669,
+    "title": "Bedrijvigheid op het strand met fort op de achtergrond - Cape Coast - 20373082 - RCE",
+    "credit": "Loek Tangel",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bedrijvigheid_op_het_strand_met_fort_op_de_achtergrond_-_Cape_Coast_-_20373082_-_RCE.jpg"
+   }
+  ]
+ },
+ "jamestown-lighthouse": {
+  "pano": null,
+  "photos": [
+   {
+    "file": "/immersive/jamestown-lighthouse/photo-0.webp",
+    "width": 1024,
+    "height": 1371,
+    "title": "Light House-Jame Town,Accra.",
+    "credit": "RoySST",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Light_House-Jame_Town,Accra..JPG"
+   },
+   {
+    "file": "/immersive/jamestown-lighthouse/photo-1.webp",
+    "width": 1024,
+    "height": 774,
+    "title": "Jamestown Light House, Accra",
+    "credit": "Livinba",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jamestown_Light_House,_Accra.jpg"
+   },
+   {
+    "file": "/immersive/jamestown-lighthouse/photo-2.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "James Light House",
+    "credit": "Livinba",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:James_Light_House.jpg"
+   },
+   {
+    "file": "/immersive/jamestown-lighthouse/photo-3.webp",
+    "width": 1024,
+    "height": 1583,
+    "title": "Overzicht vuurtoren - Accra - 20375374 - RCE",
+    "credit": "Loek Tangel",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Overzicht_vuurtoren_-_Accra_-_20375374_-_RCE.jpg"
+   },
+   {
+    "file": "/immersive/jamestown-lighthouse/photo-4.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Lighthouse at Jamestown Accra",
+    "credit": "Adotey Hoffman",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lighthouse_at_Jamestown_Accra.jpg"
+   },
+   {
+    "file": "/immersive/jamestown-lighthouse/photo-5.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Lighthouse at Jamestown, Accra",
+    "credit": "Adotey Hoffman",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lighthouse_at_Jamestown,_Accra.jpg"
+   }
+  ]
+ },
+ "manhyia-palace": {
+  "pano": null,
+  "photos": [
+   {
+    "file": "/immersive/manhyia-palace/photo-0.webp",
+    "width": 1024,
+    "height": 457,
+    "title": "Manhyia Palace \u2013 Panorama",
+    "credit": "jbdodane",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manhyia_Palace_%E2%80%93_Panorama.jpg"
+   },
+   {
+    "file": "/immersive/manhyia-palace/photo-1.webp",
+    "width": 1024,
+    "height": 575,
+    "title": "Manhyia's Lion Guard",
+    "credit": "Tryongliph",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manhyia%27s_Lion_Guard.jpg"
+   },
+   {
+    "file": "/immersive/manhyia-palace/photo-2.webp",
+    "width": 1024,
+    "height": 582,
+    "title": "Manhyia's Lion Guards",
+    "credit": "Tryongliph",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manhyia%27s_Lion_Guards.jpg"
+   },
+   {
+    "file": "/immersive/manhyia-palace/photo-3.webp",
+    "width": 1024,
+    "height": 822,
+    "title": "Peace Bell, Asante's Palace, Kumasi Ghana",
+    "credit": "AfricanLibrarian",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Peace_Bell,_Asante%27s_Palace,_Kumasi_Ghana.jpg"
+   },
+   {
+    "file": "/immersive/manhyia-palace/photo-4.webp",
+    "width": 1024,
+    "height": 683,
+    "title": "Manhyia Palace Museum (Kumasi, Ghana 2017)",
+    "credit": "Dan Sloan",
+    "licence": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manhyia_Palace_Museum_(Kumasi,_Ghana_2017).jpg"
+   },
+   {
+    "file": "/immersive/manhyia-palace/photo-5.webp",
+    "width": 900,
+    "height": 507,
+    "title": "Ashanti King Otumfour Osei Tutu II",
+    "credit": "Zackagonii",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ashanti_King_Otumfour_Osei_Tutu_II.jpg"
+   }
+  ]
+ },
+ "adomi-bridge": {
+  "pano": null,
+  "photos": [
+   {
+    "file": "/immersive/adomi-bridge/photo-0.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Volta bridge Atimpoku Ghana",
+    "credit": "Erik Kristensen",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Volta_bridge_Atimpoku_Ghana.jpg"
+   },
+   {
+    "file": "/immersive/adomi-bridge/photo-1.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Volta River with Adomi Bridge",
+    "credit": "ZSM",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Volta_River_with_Adomi_Bridge.JPG"
+   },
+   {
+    "file": "/immersive/adomi-bridge/photo-2.webp",
+    "width": 1024,
+    "height": 1507,
+    "title": "Adome Bridge, River Volta, Ghana",
+    "credit": "Paul from Bournemouth, United Kingdom",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Adome_Bridge,_River_Volta,_Ghana.jpg"
+   },
+   {
+    "file": "/immersive/adomi-bridge/photo-3.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Nice bridge, close to Akosombo Dam",
+    "credit": "Jurgen from Netherlands",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Nice_bridge,_close_to_Akosombo_Dam.jpg"
+   },
+   {
+    "file": "/immersive/adomi-bridge/photo-4.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "View of Akosombo bridge",
+    "credit": "Erik Cleves Kristensen",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:View_of_Akosombo_bridge.jpg"
+   },
+   {
+    "file": "/immersive/adomi-bridge/photo-5.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Lake Volta 05",
+    "credit": "Nora Morgan",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lake_Volta_05.jpg"
+   }
+  ]
+ },
+ "black-star-gate": {
+  "pano": null,
+  "photos": [
+   {
+    "file": "/immersive/black-star-gate/photo-0.webp",
+    "width": 1024,
+    "height": 687,
+    "title": "Black Star Arch and Soccer Stadium Accra",
+    "credit": "Flowizm",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Black_Star_Arch_and_Soccer_Stadium_Accra.jpg"
+   },
+   {
+    "file": "/immersive/black-star-gate/photo-1.webp",
+    "width": 1024,
+    "height": 831,
+    "title": "Independence Arch",
+    "credit": "Stig Nygaard from Copenhagen, Denmarkhggggg",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Independence_Arch.jpg"
+   },
+   {
+    "file": "/immersive/black-star-gate/photo-2.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Independence Arch - Accra, Ghana1",
+    "credit": "George Appiah",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Independence_Arch_-_Accra,_Ghana1.jpg"
+   },
+   {
+    "file": "/immersive/black-star-gate/photo-3.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Independence Arch - Accra, Ghana2",
+    "credit": "George Appiah",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Independence_Arch_-_Accra,_Ghana2.jpg"
+   },
+   {
+    "file": "/immersive/black-star-gate/photo-4.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Independence Arch - Accra, Ghana3",
+    "credit": "George Appiah",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Independence_Arch_-_Accra,_Ghana3.jpg"
+   },
+   {
+    "file": "/immersive/black-star-gate/photo-5.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Accra0034",
+    "credit": "Ina96",
+    "licence": "CC BY 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Accra0034.JPG"
+   }
+  ]
+ },
+ "independence-square": {
+  "pano": null,
+  "photos": [
+   {
+    "file": "/immersive/independence-square/photo-0.webp",
+    "width": 1024,
+    "height": 225,
+    "title": "Independence Square, Ghana",
+    "credit": "J3Lda77",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Independence_Square,_Ghana.JPG"
+   },
+   {
+    "file": "/immersive/independence-square/photo-1.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Ghana's Independence Arch",
+    "credit": "Fkoku",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ghana%27s_Independence_Arch.jpg"
+   },
+   {
+    "file": "/immersive/independence-square/photo-2.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "INDEPENDENCE SQUARE ACCRA",
+    "credit": "Isaacdanquah",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:INDEPENDENCE_SQUARE_ACCRA.jpg"
+   },
+   {
+    "file": "/immersive/independence-square/photo-3.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "INDEPENDENCE SQUARE ACCRA 2",
+    "credit": "Isaacdanquah",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:INDEPENDENCE_SQUARE_ACCRA_2.jpg"
+   },
+   {
+    "file": "/immersive/independence-square/photo-4.webp",
+    "width": 1024,
+    "height": 1365,
+    "title": "INDEPENDENCE SQUARE",
+    "credit": "Isaacdanquah",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:INDEPENDENCE_SQUARE.jpg"
+   },
+   {
+    "file": "/immersive/independence-square/photo-5.webp",
+    "width": 1024,
+    "height": 1820,
+    "title": "Black star Square",
+    "credit": "Kwaku Berko",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Black_star_Square.jpg"
+   }
+  ]
+ },
+ "kwame-nkrumah-mausoleum": {
+  "pano": null,
+  "photos": [
+   {
+    "file": "/immersive/kwame-nkrumah-mausoleum/photo-0.webp",
+    "width": 1024,
+    "height": 683,
+    "title": "KNUST main entrance with Kwame Nkrumah Memorial Park",
+    "credit": "ZSM",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:KNUST_main_entrance_with_Kwame_Nkrumah_Memorial_Park.jpg"
+   },
+   {
+    "file": "/immersive/kwame-nkrumah-mausoleum/photo-1.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Kwame Nkrumah mausoleum - panoramio",
+    "credit": "Simon Ontoyin",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kwame_Nkrumah_mausoleum_-_panoramio.jpg"
+   },
+   {
+    "file": "/immersive/kwame-nkrumah-mausoleum/photo-2.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Kwame Nkrumah Memorial Park - panoramio",
+    "credit": "Simon Ontoyin",
+    "licence": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kwame_Nkrumah_Memorial_Park_-_panoramio.jpg"
+   },
+   {
+    "file": "/immersive/kwame-nkrumah-mausoleum/photo-3.webp",
+    "width": 1024,
+    "height": 834,
+    "title": "Kwame Nkrumah Mausoleum in Accra Ghana, May 2008",
+    "credit": "Emkamau",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kwame_Nkrumah_Mausoleum_in_Accra_Ghana,_May_2008.jpg"
+   },
+   {
+    "file": "/immersive/kwame-nkrumah-mausoleum/photo-4.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Front View of Kwame Nkrumah's Mausoleum and Memorial in Accra Ghana, May 2008",
+    "credit": "Emkamau",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Front_View_of_Kwame_Nkrumah%27s_Mausoleum_and_Memorial_in_Accra_Ghana,_May_2008.jpg"
+   },
+   {
+    "file": "/immersive/kwame-nkrumah-mausoleum/photo-5.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Kwame Nkrumah Statue (21726408528)",
+    "credit": "David Stanley from Nanaimo, Canada",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kwame_Nkrumah_Statue_(21726408528).jpg"
+   }
+  ]
+ },
+ "national-theatre-ghana": {
+  "pano": null,
+  "photos": [
+   {
+    "file": "/immersive/national-theatre-ghana/photo-0.webp",
+    "width": 1024,
+    "height": 682,
+    "title": "National Theatre of Ghana 20060826",
+    "credit": "Guido Sohne",
+    "licence": "CC BY-SA 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:National_Theatre_of_Ghana_20060826.jpg"
+   },
+   {
+    "file": "/immersive/national-theatre-ghana/photo-1.webp",
+    "width": 945,
+    "height": 660,
+    "title": "Road Intersection and Road Junction, Accra",
+    "credit": "Moises.on",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Road_Intersection_and_Road_Junction,_Accra.jpg"
+   },
+   {
+    "file": "/immersive/national-theatre-ghana/photo-2.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Ghana National Theater (21927550006)",
+    "credit": "David Stanley from Nanaimo, Canada",
+    "licence": "CC BY 2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ghana_National_Theater_(21927550006).jpg"
+   },
+   {
+    "file": "/immersive/national-theatre-ghana/photo-3.webp",
+    "width": 960,
+    "height": 579,
+    "title": "A drone footage of Accra central, Ghana",
+    "credit": "Amanor kwaku",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_drone_footage_of_Accra_central,_Ghana.jpg"
+   },
+   {
+    "file": "/immersive/national-theatre-ghana/photo-4.webp",
+    "width": 1024,
+    "height": 1365,
+    "title": "National theatre",
+    "credit": "BoogieMonk",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:National_theatre.jpg"
+   },
+   {
+    "file": "/immersive/national-theatre-ghana/photo-5.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "National theatre Accra Ghana",
+    "credit": "BoogieMonk",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:National_theatre_Accra_Ghana.jpg"
+   }
+  ]
+ },
+ "national-mosque-of-ghana": {
+  "pano": null,
+  "photos": [
+   {
+    "file": "/immersive/national-mosque-of-ghana/photo-0.webp",
+    "width": 1024,
+    "height": 684,
+    "title": "National Mosque of Ghana1",
+    "credit": "Amuzujoe",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:National_Mosque_of_Ghana1.jpg"
+   },
+   {
+    "file": "/immersive/national-mosque-of-ghana/photo-1.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Ghana National Mosque 02",
+    "credit": "Sir Amugi",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ghana_National_Mosque_02.jpg"
+   },
+   {
+    "file": "/immersive/national-mosque-of-ghana/photo-2.webp",
+    "width": 1024,
+    "height": 768,
+    "title": "Ghana National Mosque 01",
+    "credit": "Sir Amugi",
+    "licence": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ghana_National_Mosque_01.jpg"
+   },
+   {
+    "file": "/immersive/national-mosque-of-ghana/photo-3.webp",
+    "width": 1024,
+    "height": 450,
+    "title": "Grande Mosqu\u00e9e \u00e0 Accra au Ghana 03",
+    "credit": "Adoscam",
+    "licence": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grande_Mosqu%C3%A9e_%C3%A0_Accra_au_Ghana_03.jpg"
+   },
+   {
+    "file": "/immersive/national-mosque-of-ghana/photo-4.webp",
+    "width": 1024,
+    "height": 450,
+    "title": "Grande Mosqu\u00e9e \u00e0 Accra au Ghana 02",
+    "credit": "Adoscam",
+    "licence": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grande_Mosqu%C3%A9e_%C3%A0_Accra_au_Ghana_02.jpg"
+   },
+   {
+    "file": "/immersive/national-mosque-of-ghana/photo-5.webp",
+    "width": 1024,
+    "height": 450,
+    "title": "Grande Mosqu\u00e9e \u00e0 Accra au Ghana 04",
+    "credit": "Adoscam",
+    "licence": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grande_Mosqu%C3%A9e_%C3%A0_Accra_au_Ghana_04.jpg"
+   }
+  ]
+ }
+}
