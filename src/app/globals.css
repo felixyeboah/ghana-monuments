@@ -200,6 +200,16 @@
   }
 
   /*
+    The mask above is transparent below roughly 47vh, which is well above the
+    skyline. Left on during the return flight it dissolved the monument halfway
+    down instead of letting it fly home — so it is dropped while flying.
+  */
+  .hero-fade[data-flying] {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /*
     A monument in the skyline. Everything about its state — how present it is,
     how dark its silhouette reads — comes from two numbers: `--focus` (distance
     from the centre of the viewport) and `--dim` (whether it survives the

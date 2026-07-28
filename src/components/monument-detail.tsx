@@ -76,7 +76,10 @@ export function MonumentHero({ monument }: { monument: Monument }) {
     el.style.transformOrigin = "top left";
 
     if (!isPresent) {
-      // Leaving: already at rest here, so fly back down to the slot.
+      // Leaving: already at rest here, so fly back down to the slot. The
+      // container's mask has to come off first — it is transparent below about
+      // 47vh, so the monument dissolved partway down instead of arriving.
+      el.parentElement?.setAttribute("data-flying", "");
       const controls = animate(el, { ...from }, SHARED_LAYOUT);
       controls.then(() => safeToRemove());
       return () => controls.stop();

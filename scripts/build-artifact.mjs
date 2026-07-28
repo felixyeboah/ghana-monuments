@@ -415,6 +415,12 @@ const html = String.raw`<title>Monuments of Ghana</title>
     -webkit-mask-image: linear-gradient(to bottom, #000 52%, transparent 94%);
     mask-image: linear-gradient(to bottom, #000 52%, transparent 94%);
   }
+  /*
+    The mask above is transparent below roughly 47vh, which is well above the
+    skyline. Left on during the return flight it dissolved the monument halfway
+    down instead of letting it fly home — so it is dropped while flying.
+  */
+  .record-hero[data-flying] { -webkit-mask-image: none; mask-image: none; }
   .record-hero > div { color: var(--ink); transform-origin: top left; }
   .record-hero svg { display: block; width: 100%; height: 100%; }
 
@@ -1114,6 +1120,11 @@ const html = String.raw`<title>Monuments of Ghana</title>
 
     const from = "translate(" + (there.left - here.left) + "px, " + (there.top - here.top) +
       "px) scale(" + there.width / here.width + ")";
+
+    // Drop the container mask for the return flight, or the monument dissolves
+    // partway down instead of arriving at the skyline.
+    if (back) recordHero.setAttribute("data-flying", "");
+    else recordHero.removeAttribute("data-flying");
 
     if (reduced) { hero.style.transform = back ? from : "none"; return null; }
 
