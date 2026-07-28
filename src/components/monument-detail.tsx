@@ -30,10 +30,12 @@ function hasImmersive(slug: string): boolean {
   const entry = (
     immersiveManifest as Record<
       string,
-      { pano: unknown; photos: unknown[] } | undefined
+      { sphere: unknown; pano: unknown; photos: unknown[] } | undefined
     >
   )[slug];
-  return !!entry && (entry.photos.length > 0 || !!entry.pano);
+  return (
+    !!entry && (entry.photos.length > 0 || !!entry.pano || !!entry.sphere)
+  );
 }
 import { EASE, SHARED_LAYOUT } from "@/lib/motion";
 import type { Monument } from "@/data/monuments";

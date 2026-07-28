@@ -34,6 +34,13 @@ export type PanoAsset = {
   credit: string;
 };
 
+/** A true equirectangular photosphere — the full 360° wrap. */
+export type SphereAsset = {
+  file: string;
+  title: string;
+  credit: string;
+};
+
 export type PhotoAsset = {
   file: string;
   width: number;
@@ -49,12 +56,15 @@ export type SceneOptions = {
   art: { viewBox: string; body: string };
   photos: PhotoAsset[];
   pano: PanoAsset | null;
+  sphere: SphereAsset | null;
   /** Fired once the room's centrepiece texture is in. */
   onReady: () => void;
 };
 
+export type ImmersiveMode = "gallery" | "pano" | "sphere";
+
 export type ImmersiveHandle = {
-  setMode: (mode: "gallery" | "pano") => void;
+  setMode: (mode: ImmersiveMode) => void;
   enableGyro: () => Promise<boolean>;
   vrSupported: () => Promise<boolean>;
   enterVR: () => Promise<void>;
@@ -179,7 +189,8 @@ function makePanel(
 }
 
 export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
-  const { canvas, monument, community, art, photos, pano, onReady } = options;
+  const { canvas, monument, community, art, photos, pano, sphere, onReady } =
+    options;
   const serif = resolveSerif();
   const mono = "ui-monospace, Menlo, monospace";
   const sans = "-apple-system, 'Segoe UI', Roboto, sans-serif";
@@ -191,7 +202,8 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(PAPER);
-  scene.fog = new THREE.Fog(PAPER, 9, 17);
+  const fog = new THREE.Fog(PAPER, 9, 17);
+  scene.fog = fog;
 
   // Rig: gyro writes the inner rotation, drag adds yaw on the outer.
   const yawRig = new THREE.Group();
@@ -229,8 +241,10 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
 
   const gallery = new THREE.Group();
   const panoGroup = new THREE.Group();
+  const sphereGroup = new THREE.Group();
   panoGroup.visible = false;
-  scene.add(gallery, panoGroup);
+  sphereGroup.visible = false;
+  scene.add(gallery, panoGroup, sphereGroup);
 
   const disposables: { dispose: () => void }[] = [renderer];
   const track = <T extends { dispose: () => void }>(d: T): T => {
@@ -422,6 +436,25 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
     // and anything floating mid-sweep reads as a watermark.
   }
 
+  /* ---------- photosphere mode ---------- */
+
+  if (sphere) {
+    // A true equirect wraps the whole sphere; the viewer stands at its centre.
+    // Negative X-scale turns the sphere inside out so the texture faces in.
+    const geometry = new THREE.SphereGeometry(30, 64, 48);
+    geometry.scale(-1, 1, 1);
+    const material = new THREE.MeshBasicMaterial();
+    const texture = loadTexture(sphere.file, () => {
+      material.map = texture;
+      material.needsUpdate = true;
+    });
+    const ball = new THREE.Mesh(geometry, material);
+    ball.position.y = EYE;
+    // The equirect seam lands behind the viewer, not across the opening view.
+    ball.rotation.y = -Math.PI / 2;
+    sphereGroup.add(ball);
+  }
+
   /* ---------- controls ---------- */
 
   let yaw = 0;
@@ -444,11 +477,13 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
     const dy = event.clientY - dragging.y;
     dragging = { id: event.pointerId, x: event.clientX, y: event.clientY };
     const k = 2.2 / canvas.clientHeight;
-    yaw += dx * k;
-    yawVelocity = dx * k;
+    // Grab-the-world: dragging left pulls the image left, turning you right —
+    // the convention every panorama viewer shares.
+    yaw -= dx * k;
+    yawVelocity = -dx * k;
     if (!gyroActive) {
-      pitch = THREE.MathUtils.clamp(pitch + dy * k, -pitchLimit, pitchLimit);
-      pitchVelocity = dy * k;
+      pitch = THREE.MathUtils.clamp(pitch - dy * k, -pitchLimit, pitchLimit);
+      pitchVelocity = -dy * k;
     }
   };
   const onPointerUp = (event: PointerEvent) => {
@@ -527,10 +562,22 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
 
   return {
     setMode(mode) {
-      const showPano = mode === "pano" && !!pano;
-      panoGroup.visible = showPano;
-      gallery.visible = !showPano;
-      pitchLimit = showPano ? 0.26 : 0.55;
+      const resolved: ImmersiveMode =
+        mode === "sphere" && sphere ? "sphere" : mode === "pano" && pano ? "pano" : "gallery";
+
+      sphereGroup.visible = resolved === "sphere";
+      panoGroup.visible = resolved === "pano";
+      gallery.visible = resolved === "gallery";
+
+      // Inside the sphere the photograph *is* the world — the room's paper
+      // ground and fog would slice the lower hemisphere off.
+      const room = resolved !== "sphere";
+      ground.visible = room;
+      ring.visible = room;
+      scene.fog = room ? fog : null;
+
+      // Sphere frees the pitch almost to the poles; the flat sweeps clamp it.
+      pitchLimit = resolved === "sphere" ? 1.45 : resolved === "pano" ? 0.26 : 0.55;
       pitch = THREE.MathUtils.clamp(pitch, -pitchLimit, pitchLimit);
     },
 

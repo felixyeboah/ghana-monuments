@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import {
   createImmersiveScene,
   type ImmersiveHandle,
+  type ImmersiveMode,
 } from "@/components/immersive/scene";
 import { MONUMENT_ART } from "@/lib/monument-art";
 import { communityFor } from "@/data/monument-community";
@@ -14,6 +15,15 @@ import { cn } from "@/lib/utils";
 import type { Monument } from "@/data/monuments";
 
 type ManifestEntry = {
+  sphere: {
+    file: string;
+    width: number;
+    height: number;
+    title: string;
+    credit: string;
+    licence: string;
+    sourceUrl: string | null;
+  } | null;
   pano: {
     file: string;
     width: number;
@@ -53,10 +63,14 @@ export default function ImmersiveView({
   const handleRef = useRef<ImmersiveHandle | null>(null);
 
   const entry = MANIFEST[monument.slug];
+  // The most immersive thing available opens first.
+  const initialMode: ImmersiveMode = entry?.sphere
+    ? "sphere"
+    : entry?.pano
+      ? "pano"
+      : "gallery";
   const [ready, setReady] = useState(false);
-  const [mode, setMode] = useState<"gallery" | "pano">(
-    entry?.pano ? "pano" : "gallery"
-  );
+  const [mode, setMode] = useState<ImmersiveMode>(initialMode);
   const [vrAvailable, setVrAvailable] = useState(false);
   const [gyro, setGyro] = useState<"unavailable" | "offered" | "on">(
     "unavailable"
@@ -74,10 +88,13 @@ export default function ImmersiveView({
       art,
       photos: entry.photos,
       pano: entry.pano,
+      sphere: entry.sphere,
       onReady: () => setReady(true),
     });
     handleRef.current = handle;
-    handle.setMode(entry.pano ? "pano" : "gallery");
+    handle.setMode(
+      entry.sphere ? "sphere" : entry.pano ? "pano" : "gallery"
+    );
 
     handle.vrSupported().then(setVrAvailable);
     if ("DeviceOrientationEvent" in window && "ontouchstart" in window) {
@@ -104,10 +121,16 @@ export default function ImmersiveView({
       window.removeEventListener("keydown", onKey, { capture: true });
   }, [onClose]);
 
-  const switchMode = (next: "gallery" | "pano") => {
+  const switchMode = (next: ImmersiveMode) => {
     setMode(next);
     handleRef.current?.setMode(next);
   };
+
+  const modes: { value: ImmersiveMode; label: string }[] = [
+    ...(entry?.sphere ? [{ value: "sphere" as const, label: "360°" }] : []),
+    ...(entry?.pano ? [{ value: "pano" as const, label: "Panorama" }] : []),
+    { value: "gallery", label: "Gallery" },
+  ];
 
   return (
     <motion.div
@@ -148,9 +171,9 @@ export default function ImmersiveView({
       </p>
 
       <div className="absolute bottom-5 right-5 flex flex-col items-end gap-2 sm:bottom-8 sm:right-8">
-        {entry?.pano ? (
+        {modes.length > 1 ? (
           <div className="flex overflow-hidden rounded-full border border-ink/15 bg-card">
-            {(["pano", "gallery"] as const).map((value) => (
+            {modes.map(({ value, label }) => (
               <button
                 key={value}
                 type="button"
@@ -162,7 +185,7 @@ export default function ImmersiveView({
                     : "text-ink-soft hover:text-ink"
                 )}
               >
-                {value === "pano" ? "Panorama" : "Gallery"}
+                {label}
               </button>
             ))}
           </div>
@@ -193,9 +216,11 @@ export default function ImmersiveView({
       </div>
 
       <p className="u-eyebrow pointer-events-none absolute bottom-6 left-5 hidden max-w-[46%] text-ink-faint/80 sm:left-8 sm:block">
-        {mode === "pano" && entry?.pano
-          ? `${entry.pano.title} — ${entry.pano.credit} · ${entry.pano.licence}`
-          : "Photographs — Wikimedia Commons contributors"}
+        {mode === "sphere" && entry?.sphere
+          ? `${entry.sphere.title} — ${entry.sphere.credit} · ${entry.sphere.licence}`
+          : mode === "pano" && entry?.pano
+            ? `${entry.pano.title} — ${entry.pano.credit} · ${entry.pano.licence}`
+            : "Photographs — Wikimedia Commons contributors"}
       </p>
     </motion.div>
   );
