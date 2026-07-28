@@ -59,8 +59,13 @@ as a wall piece, and the community text at your back. Elmina and Cape Coast
 open instead on real panoramic sweeps from Commons, wrapped across a partial
 cylinder arc — no 360° spheres of these monuments exist under a usable
 licence, so the arc honestly stops where the photograph does. Drag to look on
-desktop, tilt on phones (opt-in), Enter VR on headsets. App only; the
-Artifact does not carry three.js.
+desktop, tilt on phones (opt-in), Enter VR on headsets.
+
+The Artifact carries the same room: build-artifact.mjs bundles scene.ts and
+three.js with esbuild and inlines the result, so both surfaces render the
+identical scene from the identical module. The Artifact's gallery hangs the
+one photograph it embeds per monument (the app hangs six), and its panoramas
+are re-encoded at 4096 wide to keep the single file under 2MB.
 
 True 360° photospheres slot straight in: drop an equirectangular image into
 `assets/photospheres/<slug>.jpg`, run the pipeline, and it becomes that
