@@ -62,6 +62,12 @@ licence, so the arc honestly stops where the photograph does. Drag to look on
 desktop, tilt on phones (opt-in), Enter VR on headsets. App only; the
 Artifact does not carry three.js.
 
+True 360° photospheres slot straight in: drop an equirectangular image into
+`assets/photospheres/<slug>.jpg`, run the pipeline, and it becomes that
+monument's opening view with free look almost to the poles. See
+[assets/photospheres/README.md](assets/photospheres/README.md) for how to
+shoot one — interiors are what no archive currently has.
+
 ## The Artifact build
 
 `artifact/monuments-of-ghana.html` is a standalone single-file version — no
