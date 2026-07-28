@@ -1,13 +1,40 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, type CSSProperties } from "react";
-import { animate, motion, usePresence } from "motion/react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
+import { AnimatePresence, animate, motion, usePresence } from "motion/react";
+import dynamic from "next/dynamic";
 import { MonumentSilhouette } from "@/components/monument-silhouette";
 import { MonumentGallery } from "@/components/monument-gallery";
 import { GhanaMap } from "@/components/ghana-map";
 import { MONUMENT_ART } from "@/lib/monument-art";
 import { mediaFor } from "@/data/monument-media";
 import { communityFor } from "@/data/monument-community";
+import immersiveManifest from "@/data/immersive-manifest.json";
+
+/**
+ * three.js enters the page only when someone actually steps inside — the
+ * manifest alone decides whether the button shows.
+ */
+const ImmersiveView = dynamic(
+  () => import("@/components/immersive/immersive-view"),
+  { ssr: false }
+);
+
+function hasImmersive(slug: string): boolean {
+  const entry = (
+    immersiveManifest as Record<
+      string,
+      { pano: unknown; photos: unknown[] } | undefined
+    >
+  )[slug];
+  return !!entry && (entry.photos.length > 0 || !!entry.pano);
+}
 import { EASE, SHARED_LAYOUT } from "@/lib/motion";
 import type { Monument } from "@/data/monuments";
 
@@ -150,6 +177,7 @@ export function MonumentRecord({
 }: MonumentRecordProps) {
   const media = mediaFor(monument.slug);
   const community = communityFor(monument.slug);
+  const [immersiveOpen, setImmersiveOpen] = useState(false);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -216,6 +244,30 @@ export function MonumentRecord({
           <p className="text-[0.975rem] leading-[1.75] text-ink-soft">
             {monument.description}
           </p>
+
+          {hasImmersive(monument.slug) ? (
+            <button
+              type="button"
+              onClick={() => setImmersiveOpen(true)}
+              className="group mt-7 flex w-full cursor-pointer items-center justify-between gap-4 rounded-xl border border-gold/40 bg-gold/[0.06] p-5 text-left transition-colors hover:border-gold/70 hover:bg-gold/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+            >
+              <span>
+                <span className="u-eyebrow block text-gold">Step inside</span>
+                <span className="mt-1.5 block font-display text-xl leading-tight text-ink">
+                  Stand among the photographs
+                </span>
+                <span className="mt-1 block text-sm text-ink-soft">
+                  Drag, tilt your phone, or use a headset to look around.
+                </span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="text-2xl text-gold transition-transform group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </button>
+          ) : null}
 
           {media?.photos.length ? (
             <MonumentGallery
@@ -354,6 +406,16 @@ export function MonumentRecord({
           />
         </nav>
       </motion.article>
+
+      <AnimatePresence>
+        {immersiveOpen && (
+          <ImmersiveView
+            key={`immersive-${monument.slug}`}
+            monument={monument}
+            onClose={() => setImmersiveOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
