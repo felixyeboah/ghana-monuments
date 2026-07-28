@@ -16,15 +16,36 @@ import type { Community } from "@/data/monument-community";
  * ink, not as a rendered space.
  */
 
-const PAPER = 0xf7f5f0;
-const PAPER_DEEP = 0xefece4;
-const CARD = 0xfdfcfa;
-const INK = "#14100e";
-const INK_SOFT = "#4a423c";
-const INK_FAINT = "#8c827a";
-const GOLD = "#a6851f";
-
 const EYE = 1.6;
+
+/**
+ * The room wears whatever theme the page is in. Resolved once at creation
+ * from the same custom properties the rest of the site runs on, so the dark
+ * "evening" palette carries into the 3D space too; fallbacks are the light
+ * values.
+ */
+function resolvePalette() {
+  const style = getComputedStyle(document.documentElement);
+  const read = (name: string, fallback: string) =>
+    style.getPropertyValue(name).trim() || fallback;
+  return {
+    paper: read("--paper", "#f7f5f0"),
+    paperDeep: read("--paper-deep", "#efece4"),
+    card: read("--card", "#fdfcfa"),
+    ink: read("--ink", "#14100e"),
+    inkSoft: read("--ink-soft", "#4a423c"),
+    inkFaint: read("--ink-faint", "#8c827a"),
+    gold: read("--gold", "#a6851f"),
+  };
+}
+
+type Palette = ReturnType<typeof resolvePalette>;
+
+/** #rrggbb → rgba() string, for canvas strokes that need an alpha. */
+function withAlpha(hex: string, alpha: number): string {
+  const n = parseInt(hex.replace("#", ""), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+}
 
 export type PanoAsset = {
   file: string;
@@ -101,9 +122,15 @@ function makeCardTexture(
   {
     widthPx = 640,
     pad = 44,
-    background = CARD,
-    borderless = false,
-  }: { widthPx?: number; pad?: number; background?: number; borderless?: boolean } = {}
+    background = "#fdfcfa",
+    border = null,
+  }: {
+    widthPx?: number;
+    pad?: number;
+    background?: string;
+    /** Stroke colour, or null for a borderless strip. */
+    border?: string | null;
+  } = {}
 ): { texture: THREE.CanvasTexture; aspect: number } {
   const dpr = 2;
   const measure = document.createElement("canvas").getContext("2d")!;
@@ -141,10 +168,10 @@ function makeCardTexture(
   const ctx = canvas.getContext("2d")!;
   ctx.scale(dpr, dpr);
 
-  ctx.fillStyle = `#${background.toString(16).padStart(6, "0")}`;
+  ctx.fillStyle = background;
   ctx.fillRect(0, 0, widthPx, heightPx);
-  if (!borderless) {
-    ctx.strokeStyle = "rgba(20, 16, 14, 0.12)";
+  if (border) {
+    ctx.strokeStyle = border;
     ctx.lineWidth = 2;
     ctx.strokeRect(1, 1, widthPx - 2, heightPx - 2);
   }
@@ -192,6 +219,8 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
   const { canvas, monument, community, art, photos, pano, sphere, onReady } =
     options;
   const serif = resolveSerif();
+  const palette = resolvePalette();
+  const card = { background: palette.card, border: withAlpha(palette.ink, 0.12) };
   const mono = "ui-monospace, Menlo, monospace";
   const sans = "-apple-system, 'Segoe UI', Roboto, sans-serif";
 
@@ -201,8 +230,8 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
   renderer.xr.enabled = true;
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(PAPER);
-  const fog = new THREE.Fog(PAPER, 9, 17);
+  scene.background = new THREE.Color(palette.paper);
+  const fog = new THREE.Fog(palette.paper, 9, 17);
   scene.fog = fog;
 
   // Rig: gyro writes the inner rotation, drag adds yaw on the outer.
@@ -222,7 +251,7 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
   // Ground: a paper disc with a hairline ring where the room stands.
   const ground = new THREE.Mesh(
     new THREE.CircleGeometry(14, 64),
-    new THREE.MeshBasicMaterial({ color: PAPER_DEEP })
+    new THREE.MeshBasicMaterial({ color: palette.paperDeep })
   );
   ground.rotation.x = -Math.PI / 2;
   scene.add(ground);
@@ -230,7 +259,7 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
   const ring = new THREE.Mesh(
     new THREE.RingGeometry(4.55, 4.6, 96),
     new THREE.MeshBasicMaterial({
-      color: 0x14100e,
+      color: palette.ink,
       transparent: true,
       opacity: 0.12,
     })
@@ -266,7 +295,7 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
 
   // The silhouette, rasterised from the same traced SVG the skyline uses.
   {
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${art.viewBox}" style="color:${INK}">${art.body}</svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${art.viewBox}" style="color:${palette.ink}">${art.body}</svg>`;
     const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
     const image = new Image();
     image.onload = () => {
@@ -300,20 +329,20 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
           text: `${monument.yearLabel} · ${monument.region}`,
           font: mono,
           size: 20,
-          color: GOLD,
+          color: palette.gold,
           uppercase: true,
           letterSpacing: 3,
           spaceAfter: 14,
         },
-        { text: monument.name, font: serif, size: 58, color: INK, spaceAfter: 10 },
+        { text: monument.name, font: serif, size: 58, color: palette.ink, spaceAfter: 10 },
         {
           text: monument.tagline,
           font: `italic ${serif}`,
           size: 30,
-          color: INK_SOFT,
+          color: palette.inkSoft,
         },
       ],
-      { widthPx: 760 }
+      { widthPx: 760, ...card }
     );
     const plaque = makePanel(texture, 1.9, aspect);
     plaque.position.copy(onCircle(0, 4.3, 0.02));
@@ -341,7 +370,7 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
     // Card backing, standing in for a frame.
     const backing = new THREE.Mesh(
       new THREE.PlaneGeometry(width + 0.12, width / aspect + 0.12),
-      new THREE.MeshBasicMaterial({ color: CARD })
+      new THREE.MeshBasicMaterial({ color: palette.card })
     );
     backing.position.copy(onCircle(angle, 4.16, 0));
     backing.position.y = panel.position.y;
@@ -349,10 +378,10 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
 
     const caption = makeCardTexture(
       [
-        { text: photo.title || monument.name, font: sans, size: 22, color: INK, spaceAfter: 6 },
-        { text: photo.credit, font: mono, size: 15, color: INK_FAINT, uppercase: true, letterSpacing: 2 },
+        { text: photo.title || monument.name, font: sans, size: 22, color: palette.ink, spaceAfter: 6 },
+        { text: photo.credit, font: mono, size: 15, color: palette.inkFaint, uppercase: true, letterSpacing: 2 },
       ],
-      { widthPx: 560, pad: 26, borderless: true }
+      { widthPx: 560, pad: 26, background: palette.card }
     );
     const captionPanel = makePanel(caption.texture, width * 0.82, caption.aspect);
     captionPanel.position.copy(onCircle(angle, 4.08, 0));
@@ -367,24 +396,24 @@ export function createImmersiveScene(options: SceneOptions): ImmersiveHandle {
   if (community) {
     const life = makeCardTexture(
       [
-        { text: "Life around it", font: mono, size: 18, color: GOLD, uppercase: true, letterSpacing: 3, spaceAfter: 16 },
-        { text: community.people, font: serif, size: 34, color: INK, spaceAfter: 14 },
-        { text: community.life, font: sans, size: 21, color: INK_SOFT, lineHeight: 1.6 },
+        { text: "Life around it", font: mono, size: 18, color: palette.gold, uppercase: true, letterSpacing: 3, spaceAfter: 16 },
+        { text: community.people, font: serif, size: 34, color: palette.ink, spaceAfter: 14 },
+        { text: community.life, font: sans, size: 21, color: palette.inkSoft, lineHeight: 1.6 },
       ],
-      { widthPx: 700 }
+      { widthPx: 700, ...card }
     );
     const culture = makeCardTexture(
       [
-        { text: "Culture", font: mono, size: 18, color: GOLD, uppercase: true, letterSpacing: 3, spaceAfter: 16 },
-        { text: community.culture, font: sans, size: 21, color: INK_SOFT, lineHeight: 1.6, spaceAfter: community.festival ? 18 : 0 },
+        { text: "Culture", font: mono, size: 18, color: palette.gold, uppercase: true, letterSpacing: 3, spaceAfter: 16 },
+        { text: community.culture, font: sans, size: 21, color: palette.inkSoft, lineHeight: 1.6, spaceAfter: community.festival ? 18 : 0 },
         ...(community.festival
           ? [
-              { text: `The year turns on ${community.festival.name}`, font: serif, size: 28, color: INK, spaceAfter: 6 } as TextBlock,
-              { text: community.festival.when, font: mono, size: 15, color: INK_FAINT, uppercase: true, letterSpacing: 2 } as TextBlock,
+              { text: `The year turns on ${community.festival.name}`, font: serif, size: 28, color: palette.ink, spaceAfter: 6 } as TextBlock,
+              { text: community.festival.when, font: mono, size: 15, color: palette.inkFaint, uppercase: true, letterSpacing: 2 } as TextBlock,
             ]
           : []),
       ],
-      { widthPx: 700 }
+      { widthPx: 700, ...card }
     );
 
     for (const [angle, card] of [
