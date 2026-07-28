@@ -102,7 +102,9 @@ function resolveSerif(): string {
   const family = getComputedStyle(document.documentElement)
     .getPropertyValue("--font-instrument-serif")
     .trim();
-  return family || "Georgia, serif";
+  // The app exposes the face through next/font's variable; the artifact loads
+  // it under its plain family name. Fall back to the name, then the stack.
+  return family || '"Instrument Serif", Georgia, serif';
 }
 
 type TextBlock = {

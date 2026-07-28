@@ -9,6 +9,7 @@
  * Run: node scripts/build-artifact.mjs
  */
 import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { build as esbuild } from "esbuild";
 import { MONUMENTS } from "../src/data/monuments.ts";
 import { MONUMENT_ART } from "../src/lib/monument-art.ts";
 import { COMMUNITIES } from "../src/data/monument-community.ts";
@@ -36,6 +37,21 @@ const PIN =
 
 const OUT_DIR = "artifact";
 const OUT = `${OUT_DIR}/monuments-of-ghana.html`;
+
+/*
+  The immersive room, bundled from the exact modules the app renders with —
+  scene.ts plus three.js — so the two surfaces cannot drift. IIFE, inlined,
+  and </script> is escaped so the payload cannot terminate its own tag.
+*/
+const bundle = await esbuild({
+  entryPoints: ["src/components/immersive/artifact-entry.ts"],
+  bundle: true,
+  minify: true,
+  format: "iife",
+  target: "es2020",
+  write: false,
+});
+const immersiveJs = bundle.outputFiles[0].text.replace(/<\/script/gi, "<\\/script");
 
 /** Everything the page's script needs, in one payload. */
 const payload = MONUMENTS.map((monument) => {
@@ -583,6 +599,60 @@ const html = String.raw`<title>Monuments of Ghana</title>
   .where .note { margin: 1.25rem 0 0; font-size: 0.75rem; line-height: 1.6; color: var(--ink-faint); }
   .where .region { font-size: 0.875rem; color: var(--ink-soft); }
 
+  /* ---------- immersive ---------- */
+
+  .inside {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    padding: 1.25rem;
+    text-align: left;
+    border: 1px solid color-mix(in oklab, var(--gold) 40%, transparent);
+    border-radius: 0.75rem;
+    background: color-mix(in oklab, var(--gold) 6%, transparent);
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    transition: border-color 200ms var(--ease), background 200ms var(--ease);
+  }
+  .inside:hover { border-color: color-mix(in oklab, var(--gold) 70%, transparent); background: color-mix(in oklab, var(--gold) 10%, transparent); }
+  .inside-k { display: block; color: var(--gold); }
+  .inside-t { display: block; margin-top: 0.375rem; font-size: 1.25rem; line-height: 1.2; }
+  .inside-s { display: block; margin-top: 0.25rem; font-size: 0.875rem; color: var(--ink-soft); }
+  .inside-a { font-size: 1.5rem; color: var(--gold); }
+
+  .imm { position: fixed; inset: 0; z-index: 70; background: var(--paper); }
+  .imm-canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+  .imm-canvas:active { cursor: grabbing; }
+  .imm-veil {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper);
+    color: var(--ink-faint);
+    transition: opacity 500ms var(--ease);
+    pointer-events: none;
+  }
+  .imm-veil--lifted { opacity: 0; }
+  .imm-title { position: absolute; top: 1.6rem; inset-inline: 0; margin: 0; text-align: center; color: var(--ink-faint); pointer-events: none; }
+  .imm-hint { position: absolute; bottom: 1.6rem; inset-inline: 0; margin: 0; text-align: center; color: var(--ink-faint); pointer-events: none; }
+  .imm-credit { position: absolute; bottom: 1.6rem; left: 1.25rem; margin: 0; max-width: 42%; color: color-mix(in oklab, var(--ink-faint) 80%, transparent); pointer-events: none; }
+  @media (min-width: 640px) { .imm-credit { left: 2rem; } }
+  @media (max-width: 639px) { .imm-title, .imm-credit { display: none; } }
+  .imm-controls { position: absolute; right: 1.25rem; bottom: 1.25rem; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+  @media (min-width: 640px) { .imm-controls { right: 2rem; bottom: 2rem; } }
+  .imm-chips { display: flex; overflow: hidden; border: 1px solid var(--line); border-radius: 999px; background: var(--card); }
+  .imm-chip { border: 0; background: none; color: var(--ink-soft); padding: 0.5rem 1rem; cursor: pointer; font: inherit; }
+  .imm-chip:hover { color: var(--ink); }
+  .imm-chip--on { background: var(--ink); color: var(--paper); }
+  .imm-btn { border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); padding: 0.5rem 1rem; cursor: pointer; font: inherit; }
+  .imm-btn--vr { background: var(--forest); color: var(--paper); border-color: transparent; }
+
   .neighbours { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-top: 1.5rem; }
   .neighbours button, .neighbours .empty {
     padding: 1rem;
@@ -645,6 +715,8 @@ const html = String.raw`<title>Monuments of Ghana</title>
   </div>
 </div>
 
+<script>${immersiveJs}</script>
+
 <script>
 (() => {
   "use strict";
@@ -652,6 +724,8 @@ const html = String.raw`<title>Monuments of Ghana</title>
   const MONUMENTS = ${JSON.stringify(payload)};
   const GHANA = ${JSON.stringify({ viewBox: ghana.viewBox, path: ghana.path })};
   const PIN = ${JSON.stringify(PIN)};
+  const IMM_PANOS = ${JSON.stringify(assets.panos ?? {})};
+  const IMM_SPHERES = ${JSON.stringify(assets.spheres ?? {})};
   const MAP_FULL = GHANA.viewBox.split(" ").map(Number);
   /** Enough to separate the six Accra monuments; more just magnifies empty fill. */
   const MAP_ZOOM = 3.5;
@@ -1052,6 +1126,14 @@ const html = String.raw`<title>Monuments of Ghana</title>
         '<p class="tagline serif">' + esc(m.tagline) + "</p>" +
         "<hr />" +
         '<p class="body">' + esc(m.description) + "</p>" +
+        '<button type="button" class="inside" data-inside>' +
+          "<span>" +
+            '<span class="inside-k eyebrow">Step inside</span>' +
+            '<span class="inside-t serif">Stand among the photographs</span>' +
+            '<span class="inside-s">Drag, tilt your phone, or use a headset to look around.</span>' +
+          "</span>" +
+          '<span class="inside-a" aria-hidden="true">→</span>' +
+        "</button>" +
         photo +
         '<dl class="facts">' + facts + "</dl>" +
         encyclopaedia +
@@ -1066,7 +1148,29 @@ const html = String.raw`<title>Monuments of Ghana</title>
     for (const button of recordBody.querySelectorAll("[data-goto]")) {
       button.addEventListener("click", () => openRecord(button.dataset.goto));
     }
+    const inside = recordBody.querySelector("[data-inside]");
+    if (inside) inside.addEventListener("click", () => openImmersive(m));
     wireMap(m);
+  }
+
+  /** Hands the record's monument to the bundled three.js room. */
+  function openImmersive(m) {
+    const pano = IMM_PANOS[m.slug] || null;
+    const sphere = IMM_SPHERES[m.slug] || null;
+    window.__immersive.open({
+      monument: m,
+      community: m.community,
+      art: { viewBox: m.viewBox, body: m.art },
+      photos: m.photo
+        ? [{ file: m.photo.src, width: m.photo.width, height: m.photo.height, title: m.photo.title, credit: m.photo.credit }]
+        : [],
+      pano: pano
+        ? { file: pano.src, width: pano.width, height: pano.height, title: pano.title, credit: pano.credit, licence: pano.licence }
+        : null,
+      sphere: sphere
+        ? { file: sphere.src, title: sphere.title, credit: sphere.credit, licence: sphere.licence }
+        : null,
+    });
   }
 
   /**
