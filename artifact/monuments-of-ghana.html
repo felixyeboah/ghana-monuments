@@ -350,6 +350,12 @@
   .record-hero > div { color: var(--ink); transform-origin: top left; }
   .record-hero svg { display: block; width: 100%; height: 100%; }
 
+  /*
+    Leaving animates on this element alone. Fading this *and* the sheet inside
+    it meant two nested opacity layers compositing at once, over a subtree
+    holding a photograph and the map — which is what made the exit drag.
+    One layer moves; everything within it is static.
+  */
   .record-scroll {
     position: fixed;
     inset: 0;
@@ -357,9 +363,14 @@
     overflow-y: auto;
     overscroll-behavior: contain;
     opacity: 0;
-    transition: opacity 300ms var(--ease);
+    translate: 0 44px;
+    transition: opacity 340ms var(--ease), translate 420ms var(--ease);
+    /* Promoted up front: this layer only exists while a record is open, and
+       letting the compositor create it on the exit's first frame is a hitch
+       exactly where the movement starts. */
+    will-change: opacity, translate;
   }
-  .record[data-open] .record-scroll { opacity: 1; }
+  .record[data-open] .record-scroll { opacity: 1; translate: 0 0; }
 
   .back {
     position: fixed;
@@ -369,8 +380,9 @@
     padding: 0.5rem 1rem;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: color-mix(in oklab, var(--paper) 80%, transparent);
-    backdrop-filter: blur(8px);
+    /* Solid, not blurred: a backdrop-filter inside an animating layer is
+       re-read and re-blurred every frame. */
+    background: var(--paper);
     color: var(--ink);
     cursor: pointer;
     font: inherit;
@@ -386,17 +398,14 @@
   }
   @media (min-width: 640px) { .record article { padding: 0 2rem 6rem; } }
 
+  /* Static: the scroll container above carries the whole record in and out. */
   .sheet {
     border: 1px solid var(--line);
     border-radius: 1rem;
     background: var(--card);
     padding: 1.25rem;
     box-shadow: 0 -24px 60px -40px rgb(20 16 14 / 0.5);
-    translate: 0 44px;
-    opacity: 0;
-    transition: translate 600ms var(--ease), opacity 600ms var(--ease);
   }
-  .record[data-open] .sheet { translate: 0 0; opacity: 1; }
   @media (min-width: 640px) { .sheet { padding: 2.5rem; } }
 
   .sheet .kicker { margin: 0; color: var(--gold); }

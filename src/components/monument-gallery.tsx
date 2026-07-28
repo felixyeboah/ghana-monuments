@@ -87,7 +87,7 @@ export function MonumentGallery({
           type="button"
           onClick={() => go(index - 1)}
           aria-label="Previous photograph"
-          className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-paper/85 px-3 py-2 text-ink opacity-0 backdrop-blur-sm transition-opacity focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-gold group-hover:opacity-100"
+          className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-paper px-3 py-2 text-ink opacity-0 transition-opacity focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-gold group-hover:opacity-100"
         >
           ←
         </button>
@@ -95,7 +95,7 @@ export function MonumentGallery({
           type="button"
           onClick={() => go(index + 1)}
           aria-label="Next photograph"
-          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-paper/85 px-3 py-2 text-ink opacity-0 backdrop-blur-sm transition-opacity focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-gold group-hover:opacity-100"
+          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-paper px-3 py-2 text-ink opacity-0 transition-opacity focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-gold group-hover:opacity-100"
         >
           →
         </button>

@@ -154,13 +154,25 @@ export function MonumentRecord({
     return () => window.removeEventListener("keydown", onKey);
   }, [onBack]);
 
+  /*
+    Leaving animates on the root alone. Fading the root *and* the article inside
+    it meant two nested opacity layers compositing at once, over a subtree
+    holding a photograph and the map — which is what made the exit drag. One
+    layer moves; everything within it is static.
+  */
   return (
     <motion.div
+      // Promoted up front: this layer only exists while a record is open, and
+      // letting the compositor create it on the exit's first frame is a hitch
+      // exactly where the movement starts.
+      style={{ willChange: "opacity, transform" }}
       className="fixed inset-0 z-40 overflow-y-auto overscroll-contain"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: EASE }}
+      // Drops away rather than dissolving in place, so leaving reads as the
+      // record being put down instead of the page blinking.
+      exit={{ opacity: 0, y: 56 }}
+      transition={{ duration: 0.34, ease: EASE }}
     >
       <motion.button
         type="button"
@@ -168,7 +180,9 @@ export function MonumentRecord({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.28, duration: 0.4 }}
-        className="u-eyebrow fixed left-5 top-5 z-50 cursor-pointer rounded-full border border-ink/15 bg-paper/80 px-4 py-2 text-ink backdrop-blur-md transition-colors hover:border-ink/40 hover:bg-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold sm:left-8 sm:top-8"
+        /* Solid, not blurred: a backdrop-filter inside an animating layer is
+           re-read and re-blurred every frame. */
+        className="u-eyebrow fixed left-5 top-5 z-50 cursor-pointer rounded-full border border-ink/15 bg-paper px-4 py-2 text-ink transition-colors hover:border-ink/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold sm:left-8 sm:top-8"
       >
         ← All monuments
       </motion.button>
@@ -176,9 +190,6 @@ export function MonumentRecord({
       <motion.article
         initial={{ opacity: 0, y: 44 }}
         animate={{ opacity: 1, y: 0 }}
-        // Drops away rather than dissolving in place, so leaving reads as the
-        // record being put down instead of the page blinking.
-        exit={{ opacity: 0, y: 56 }}
         transition={{ delay: 0.14, duration: 0.6, ease: EASE }}
         className="relative mx-auto mt-[42vh] max-w-3xl px-4 pb-24 sm:px-8"
       >
