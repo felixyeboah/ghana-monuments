@@ -11,6 +11,7 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { MONUMENTS } from "../src/data/monuments.ts";
 import { MONUMENT_ART } from "../src/lib/monument-art.ts";
+import { COMMUNITIES } from "../src/data/monument-community.ts";
 
 const media = JSON.parse(
   await readFile("src/data/monument-media.json", "utf8")
@@ -63,6 +64,7 @@ const payload = MONUMENTS.map((monument) => {
       ? projectPoint(extra.coordinates.lat, extra.coordinates.lon)
       : null,
     photo,
+    community: COMMUNITIES[monument.slug] ?? null,
   };
 });
 
@@ -521,6 +523,28 @@ const html = String.raw`<title>Monuments of Ghana</title>
   .encyclopaedia a { display: inline-block; margin-top: 1rem; color: var(--ink); }
 
   /* Ghana drawn, not tiled — no tile server exists inside a CSP'd Artifact. */
+  /* Who lives with the monument, set apart from the building's own facts. */
+  .life { margin-top: 2.25rem; padding-top: 1.75rem; border-top: 1px solid var(--line); }
+  .life > h2 { margin: 0; color: var(--ink-faint); }
+  .life .meta { display: grid; gap: 1rem 2rem; margin: 1rem 0 0; }
+  @media (min-width: 640px) { .life .meta { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .life .meta .wide { grid-column: 1 / -1; }
+  .life dt { color: var(--ink-faint); }
+  .life dd { margin: 0.375rem 0 0; font-size: 0.875rem; line-height: 1.6; }
+  .life p.para { margin: 1.75rem 0 0; font-size: 0.975rem; line-height: 1.75; color: var(--ink-soft); }
+  .life p.para + p.para { margin-top: 1rem; }
+  .festival {
+    margin-top: 1.75rem;
+    padding: 1.25rem;
+    border: 1px solid color-mix(in oklab, var(--gold) 35%, transparent);
+    border-radius: 0.75rem;
+    background: color-mix(in oklab, var(--gold) 7%, transparent);
+  }
+  .festival .label { margin: 0; color: var(--gold); }
+  .festival .name { margin: 0.5rem 0 0; font-size: 1.5rem; line-height: 1.2; }
+  .festival .when { margin: 0.375rem 0 0; color: var(--ink-faint); }
+  .festival .note { margin: 0.75rem 0 0; font-size: 0.875rem; line-height: 1.6; color: var(--ink-soft); }
+
   .where { margin-top: 2.25rem; padding-top: 1.75rem; border-top: 1px solid var(--line); }
   .where > h2 { margin: 0; color: var(--ink-faint); }
   .where .layout { display: flex; align-items: center; gap: 1.5rem; margin-top: 1rem; }
@@ -954,6 +978,27 @@ const html = String.raw`<title>Monuments of Ghana</title>
         "</section>"
       : "";
 
+    const c = m.community;
+    const life = c
+      ? '<section class="life"><h2 class="eyebrow">Life around it</h2>' +
+          '<dl class="meta">' +
+            '<div><dt class="eyebrow">People</dt><dd>' + esc(c.people) + "</dd></div>" +
+            '<div><dt class="eyebrow">Language</dt><dd>' + esc(c.language) + "</dd></div>" +
+            '<div class="wide"><dt class="eyebrow">Livelihood</dt><dd>' + esc(c.livelihood) + "</dd></div>" +
+          "</dl>" +
+          '<p class="para">' + esc(c.life) + "</p>" +
+          '<p class="para">' + esc(c.culture) + "</p>" +
+          (c.festival
+            ? '<div class="festival">' +
+                '<p class="label eyebrow">The year turns on</p>' +
+                '<p class="name serif">' + esc(c.festival.name) + "</p>" +
+                '<p class="when eyebrow">' + esc(c.festival.when) + "</p>" +
+                '<p class="note">' + esc(c.festival.note) + "</p>" +
+              "</div>"
+            : "") +
+        "</section>"
+      : "";
+
     const where = m.mapPoint
       ? '<section class="where"><h2 class="eyebrow">Where it stands</h2><div class="layout">' +
           '<figure><svg id="ghanaMap" viewBox="' + GHANA.viewBox + '" role="group"' +
@@ -1010,6 +1055,7 @@ const html = String.raw`<title>Monuments of Ghana</title>
         photo +
         '<dl class="facts">' + facts + "</dl>" +
         encyclopaedia +
+        life +
         where +
       "</div>" +
       '<nav class="neighbours">' +

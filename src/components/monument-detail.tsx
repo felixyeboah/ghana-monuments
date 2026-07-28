@@ -7,6 +7,7 @@ import { MonumentGallery } from "@/components/monument-gallery";
 import { GhanaMap } from "@/components/ghana-map";
 import { MONUMENT_ART } from "@/lib/monument-art";
 import { mediaFor } from "@/data/monument-media";
+import { communityFor } from "@/data/monument-community";
 import { EASE, SHARED_LAYOUT } from "@/lib/motion";
 import type { Monument } from "@/data/monuments";
 
@@ -148,6 +149,7 @@ export function MonumentRecord({
   onNavigate,
 }: MonumentRecordProps) {
   const media = mediaFor(monument.slug);
+  const community = communityFor(monument.slug);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -248,6 +250,55 @@ export function MonumentRecord({
                 >
                   Read the full article ↗
                 </a>
+              ) : null}
+            </section>
+          ) : null}
+
+          {community ? (
+            <section className="mt-9 border-t border-ink/10 pt-7">
+              <h2 className="u-eyebrow text-ink-faint">Life around it</h2>
+
+              <dl className="mt-4 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+                <div>
+                  <dt className="u-eyebrow text-ink-faint">People</dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-ink">
+                    {community.people}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="u-eyebrow text-ink-faint">Language</dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-ink">
+                    {community.language}
+                  </dd>
+                </div>
+                <div className="sm:col-span-2">
+                  <dt className="u-eyebrow text-ink-faint">Livelihood</dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-ink">
+                    {community.livelihood}
+                  </dd>
+                </div>
+              </dl>
+
+              <p className="mt-7 text-[0.975rem] leading-[1.75] text-ink-soft">
+                {community.life}
+              </p>
+              <p className="mt-4 text-[0.975rem] leading-[1.75] text-ink-soft">
+                {community.culture}
+              </p>
+
+              {community.festival ? (
+                <div className="mt-7 rounded-xl border border-gold/35 bg-gold/[0.07] p-5">
+                  <p className="u-eyebrow text-gold">The year turns on</p>
+                  <p className="mt-2 font-display text-2xl leading-tight text-ink">
+                    {community.festival.name}
+                  </p>
+                  <p className="u-eyebrow mt-1.5 text-ink-faint">
+                    {community.festival.when}
+                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+                    {community.festival.note}
+                  </p>
+                </div>
               ) : null}
             </section>
           ) : null}
