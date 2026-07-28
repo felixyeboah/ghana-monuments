@@ -94,6 +94,12 @@ export function Skyline({
   const activeRef = useRef<string | null>(null);
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   /**
+   * Where a deliberate step is heading. Pressing an arrow names its destination
+   * straight away instead of waiting for the spring to carry that monument to
+   * the centre, and stops the caption flicking through everything in between.
+   */
+  const travellingToRef = useRef<string | null>(null);
+  /**
    * Until the reader moves the skyline themselves, the resting position is
    * re-derived on every measurement. The first measure can land before
    * `clamp()` and the webfonts resolve, and a position computed from that
@@ -207,6 +213,13 @@ export function Skyline({
         }
       }
 
+      // Hold the named destination until the skyline actually reaches it, then
+      // fall through so the arrival is synced like any other move.
+      if (travellingToRef.current) {
+        if (bestSlug !== travellingToRef.current) return;
+        travellingToRef.current = null;
+      }
+
       if (bestSlug !== activeRef.current) {
         activeRef.current = bestSlug;
         setActiveSlug(bestSlug);
@@ -216,6 +229,25 @@ export function Skyline({
   );
 
   useMotionValueEvent(glide, "change", applyFocus);
+
+  /**
+   * Moves the skyline to an offset. The spring normally carries it there, but a
+   * hidden tab gets no animation frames and reduced motion asks for none — in
+   * both cases the value is jumped so the destination is still reached.
+   */
+  const glideTo = useCallback(
+    (offset: number) => {
+      const next = clamp(offset);
+      userMovedRef.current = true;
+      target.set(next);
+
+      if (reduceMotion || document.hidden) {
+        glide.jump(next);
+        applyFocus(next);
+      }
+    },
+    [clamp, target, glide, reduceMotion, applyFocus]
+  );
 
   // Measure once laid out, and whenever the box changes.
   useLayoutSync(() => {
@@ -284,6 +316,8 @@ export function Skyline({
 
       event.preventDefault();
       userMovedRef.current = true;
+      // Taking the wheel abandons any step in progress.
+      travellingToRef.current = null;
       target.set(clamp(target.get() + delta));
 
       // Let the gesture finish, then ease onto the nearest monument.
@@ -333,6 +367,7 @@ export function Skyline({
       if (drag.travelled <= DRAG_THRESHOLD) return;
       drag.captured = true;
       userMovedRef.current = true;
+      travellingToRef.current = null;
       event.currentTarget.setPointerCapture(event.pointerId);
     }
 
@@ -377,10 +412,8 @@ export function Skyline({
     if (!first) return;
 
     const offset = offsetFor(first.slug);
-    if (offset === null) return;
-    userMovedRef.current = true;
-    target.set(clamp(offset));
-  }, [query, matched, monuments, offsetFor, clamp, target]);
+    if (offset !== null) glideTo(offset);
+  }, [query, matched, monuments, offsetFor, glideTo]);
 
   const step = useCallback(
     (direction: 1 | -1) => {
@@ -391,10 +424,14 @@ export function Skyline({
 
       const offset = offsetFor(next.slug);
       if (offset === null) return;
-      userMovedRef.current = true;
-      target.set(clamp(offset));
+
+      // Name the destination now; the spring catches up.
+      travellingToRef.current = next.slug;
+      activeRef.current = next.slug;
+      setActiveSlug(next.slug);
+      glideTo(offset);
     },
-    [monuments, matched, offsetFor, clamp, target]
+    [monuments, matched, offsetFor, glideTo]
   );
 
   const onKeyDown = (event: React.KeyboardEvent) => {
@@ -408,6 +445,13 @@ export function Skyline({
   const active = activeSlug
     ? monuments.find((m) => m.slug === activeSlug) ?? null
     : null;
+
+  // Stepping walks the surviving matches, so the arrows never land on a ghost.
+  const order = monuments.filter((m) => matched.has(m.slug));
+  const position = order.findIndex((m) => m.slug === activeSlug);
+  const earlier = position > 0 ? order[position - 1] : null;
+  const later =
+    position >= 0 && position < order.length - 1 ? order[position + 1] : null;
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
@@ -459,6 +503,9 @@ export function Skyline({
         nothingMatched={matched.size === 0}
         query={query}
         vertical={vertical}
+        earlier={earlier}
+        later={later}
+        onStep={step}
       />
     </div>
   );
@@ -580,19 +627,33 @@ function SkylineCaption({
   nothingMatched,
   query,
   vertical,
+  earlier,
+  later,
+  onStep,
 }: {
   active: Monument | null;
   nothingMatched: boolean;
   query: string;
   vertical: boolean;
+  earlier: Monument | null;
+  later: Monument | null;
+  onStep: (direction: 1 | -1) => void;
 }) {
   return (
     <div
       className={cn(
-        "relative shrink-0 bg-paper px-6 pb-7 text-center",
+        "relative flex shrink-0 items-center gap-3 bg-paper px-4 pb-7 text-center sm:gap-6 sm:px-8",
         vertical ? "min-h-[4.5rem]" : "min-h-[5.5rem]"
       )}
     >
+      <StepButton
+        monument={earlier}
+        direction={-1}
+        vertical={vertical}
+        onStep={onStep}
+      />
+
+      <div className="min-w-0 flex-1">
       <AnimatePresence mode="wait">
         {nothingMatched ? (
           <motion.p
@@ -622,7 +683,56 @@ function SkylineCaption({
             </p>
           </motion.div>
         ) : null}
-      </AnimatePresence>
+        </AnimatePresence>
+      </div>
+
+      <StepButton
+        monument={later}
+        direction={1}
+        vertical={vertical}
+        onStep={onStep}
+      />
     </div>
+  );
+}
+
+/**
+ * Sits at the outer edge of the caption row. Disabled rather than hidden at
+ * either end of the line, so the title never shifts sideways as you step.
+ */
+function StepButton({
+  monument,
+  direction,
+  vertical,
+  onStep,
+}: {
+  monument: Monument | null;
+  direction: 1 | -1;
+  vertical: boolean;
+  onStep: (direction: 1 | -1) => void;
+}) {
+  const isLater = direction === 1;
+  const glyph = vertical ? (isLater ? "↓" : "↑") : isLater ? "→" : "←";
+
+  return (
+    <button
+      type="button"
+      disabled={!monument}
+      onClick={() => onStep(direction)}
+      aria-label={
+        monument
+          ? `${isLater ? "Later" : "Earlier"}: ${monument.name}, ${monument.yearLabel}`
+          : `No ${isLater ? "later" : "earlier"} monument`
+      }
+      title={monument ? monument.name : undefined}
+      className={cn(
+        "flex size-11 shrink-0 items-center justify-center rounded-full border text-lg transition-colors",
+        monument
+          ? "cursor-pointer border-ink/15 text-ink hover:border-ink/40 hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          : "cursor-default border-ink/5 text-ink-faint/40"
+      )}
+    >
+      <span aria-hidden="true">{glyph}</span>
+    </button>
   );
 }
