@@ -16,16 +16,17 @@
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-instrument-serif);
 
-  /* Palette */
-  --color-paper: #f7f5f0;
-  --color-paper-deep: #efece4;
-  --color-ink: #14100e;
-  --color-ink-soft: #4a423c;
-  --color-ink-faint: #8c827a;
-  --color-gold: #c9a227;
-  --color-gold-soft: #e8d9a0;
-  --color-clay: #b02418;
-  --color-forest: #046a38;
+  /* Palette — routed through :root custom properties so the dark theme can
+     swap the values while every utility class stays the same. */
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-clay: var(--clay);
+  --color-forest: var(--forest);
 
   /* shadcn tokens, mapped onto the palette */
   --color-card: var(--card);
@@ -57,25 +58,62 @@
 }
 
 :root {
-  --background: #f7f5f0;
-  --foreground: #14100e;
+  --paper: #f7f5f0;
+  --paper-deep: #efece4;
+  --ink: #14100e;
+  --ink-soft: #4a423c;
+  --ink-faint: #8c827a;
+  --gold: #c9a227;
+  --gold-soft: #e8d9a0;
+  --clay: #b02418;
+  --forest: #046a38;
+  --grain: rgb(20 16 14 / 0.022);
+
+  --background: var(--paper);
+  --foreground: var(--ink);
   --card: #fdfcfa;
-  --card-foreground: #14100e;
+  --card-foreground: var(--ink);
   --popover: #fdfcfa;
-  --popover-foreground: #14100e;
-  --primary: #046a38;
-  --primary-foreground: #f7f5f0;
-  --secondary: #efece4;
-  --secondary-foreground: #14100e;
-  --muted: #efece4;
-  --muted-foreground: #8c827a;
-  --accent: #e8d9a0;
-  --accent-foreground: #14100e;
-  --destructive: #b02418;
+  --popover-foreground: var(--ink);
+  --primary: var(--forest);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-deep);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-deep);
+  --muted-foreground: var(--ink-faint);
+  --accent: var(--gold-soft);
+  --accent-foreground: var(--ink);
+  --destructive: var(--clay);
   --border: #e2ddd2;
   --input: #e2ddd2;
-  --ring: #c9a227;
+  --ring: var(--gold);
   --radius: 0.5rem;
+}
+
+/*
+  The evening reading of the same palette — the paper becomes the ink, the
+  gold lifts to hold on the dark ground. Identical values to the Artifact
+  build's dark theme, so the two surfaces agree; the app follows the system
+  preference (there is no in-app toggle).
+*/
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14100e;
+    --paper-deep: #1b1613;
+    --ink: #f2ede3;
+    --ink-soft: #c3b8a9;
+    --ink-faint: #8a7f71;
+    --gold: #d8b451;
+    --gold-soft: #514417;
+    --clay: #d2604f;
+    --forest: #4aa87a;
+    --grain: rgb(242 237 227 / 0.02);
+
+    --card: #1c1714;
+    --popover: #1c1714;
+    --border: rgb(242 237 227 / 0.14);
+    --input: rgb(242 237 227 / 0.14);
+  }
 }
 
 @layer base {
@@ -83,12 +121,22 @@
     @apply border-border outline-ring/50;
   }
 
+  html {
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html {
+      color-scheme: dark;
+    }
+  }
+
   body {
     @apply bg-paper text-ink font-sans antialiased;
     /* Faint paper grain so the large flat areas are not dead colour. */
     background-image: radial-gradient(
       circle at 1px 1px,
-      rgb(20 16 14 / 0.022) 1px,
+      var(--grain) 1px,
       transparent 0
     );
     background-size: 4px 4px;
