@@ -45,10 +45,22 @@ committed, so a clean checkout runs without network access.
 | `pnpm gen:art` | `src/lib/monument-art.ts` | the traced SVGs in `assets/monuments` |
 | `pnpm gen:media` | `src/data/monument-media.json` | Wikipedia + Wikimedia Commons |
 | `node scripts/build-ghana-map.mjs` | `src/data/ghana-map.json` | geoBoundaries ADM0 |
+| `python3 scripts/build-immersive-assets.py` | `public/immersive/`, `src/data/immersive-manifest.json` | Wikimedia Commons |
 | `node scripts/build-artifact.mjs` | `artifact/monuments-of-ghana.html` | all of the above |
 
 The monument silhouettes are potrace traces: one path, `fill="currentColor"`,
 which is what lets focus and ghost states be pure CSS.
+
+## The immersive room
+
+"Step inside" on any record opens a WebXR room (three.js, loaded only on
+demand): the monument's photographs hung in an arc around you, the silhouette
+as a wall piece, and the community text at your back. Elmina and Cape Coast
+open instead on real panoramic sweeps from Commons, wrapped across a partial
+cylinder arc — no 360° spheres of these monuments exist under a usable
+licence, so the arc honestly stops where the photograph does. Drag to look on
+desktop, tilt on phones (opt-in), Enter VR on headsets. App only; the
+Artifact does not carry three.js.
 
 ## The Artifact build
 
