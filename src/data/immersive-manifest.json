@@ -1,5 +1,6 @@
 {
  "larabanga-mosque": {
+  "sphere": null,
   "pano": null,
   "photos": [
    {
@@ -59,6 +60,7 @@
   ]
  },
  "elmina-castle": {
+  "sphere": null,
   "pano": {
    "file": "/immersive/elmina-castle/pano.webp",
    "width": 8192,
@@ -126,6 +128,7 @@
   ]
  },
  "cape-coast-castle": {
+  "sphere": null,
   "pano": {
    "file": "/immersive/cape-coast-castle/pano.webp",
    "width": 5758,
@@ -193,6 +196,7 @@
   ]
  },
  "jamestown-lighthouse": {
+  "sphere": null,
   "pano": null,
   "photos": [
    {
@@ -252,6 +256,7 @@
   ]
  },
  "manhyia-palace": {
+  "sphere": null,
   "pano": null,
   "photos": [
    {
@@ -311,6 +316,7 @@
   ]
  },
  "adomi-bridge": {
+  "sphere": null,
   "pano": null,
   "photos": [
    {
@@ -370,6 +376,7 @@
   ]
  },
  "black-star-gate": {
+  "sphere": null,
   "pano": null,
   "photos": [
    {
@@ -429,6 +436,7 @@
   ]
  },
  "independence-square": {
+  "sphere": null,
   "pano": null,
   "photos": [
    {
@@ -488,6 +496,7 @@
   ]
  },
  "kwame-nkrumah-mausoleum": {
+  "sphere": null,
   "pano": null,
   "photos": [
    {
@@ -547,6 +556,7 @@
   ]
  },
  "national-theatre-ghana": {
+  "sphere": null,
   "pano": null,
   "photos": [
    {
@@ -606,6 +616,7 @@
   ]
  },
  "national-mosque-of-ghana": {
+  "sphere": null,
   "pano": null,
   "photos": [
    {
